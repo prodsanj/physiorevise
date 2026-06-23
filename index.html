@@ -164,6 +164,28 @@
   .rbtns .menu{background:#15151a;color:var(--text);border:1px solid var(--line2)}
 
   .disclaimer{color:#82858d;font-size:11.5px;text-align:center;margin-top:18px;letter-spacing:.3px;line-height:1.6}
+  .editlink{background:#15151a;border:1px solid var(--line2);color:var(--silver2);font-size:12px;font-weight:600;padding:7px 12px;border-radius:9px;cursor:pointer}
+  .editlink:hover{border-color:var(--silver2);color:#fff}
+  .ed-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .ed-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .ed-btn{width:auto;padding:9px 12px;font-size:12.5px}
+  .ed-listhead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:14px 0 10px;font-size:13px;color:var(--muted)}
+  .ed-list{display:flex;flex-direction:column;gap:8px}
+  .qrow{display:flex;gap:10px;align-items:center;background:#0f0f12;border:1px solid var(--line2);border-radius:9px;padding:10px 12px}
+  .qrow-main{display:flex;gap:10px;align-items:center;flex:1;min-width:0}
+  .qrow-d{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:3px 7px;border-radius:5px;border:1px solid var(--line2);flex:none}
+  .qrow-d.d-Easy{color:var(--good)} .qrow-d.d-Medium{color:var(--silver2)} .qrow-d.d-Hard{color:var(--bad)}
+  .qrow-q{flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .qrow-act{display:flex;gap:6px;flex:none}
+  .qrow-act button{background:#15151a;border:1px solid var(--line2);color:var(--text);font-size:12px;padding:6px 10px;border-radius:7px;cursor:pointer}
+  .qrow-act button:hover{border-color:var(--silver3)}
+  .ed-form textarea,.ed-form select{width:100%;background:#0e0e10;color:var(--text);border:1px solid var(--line2);padding:11px 12px;border-radius:10px;font-size:14px;font-family:inherit}
+  .ed-form textarea{min-height:70px;resize:vertical}
+  .ed-opt{display:flex;align-items:center;gap:8px;margin-top:8px}
+  .ed-opt .ed-key{font-weight:700;color:var(--silver2);width:16px;flex:none}
+  .ed-opt input[type=text]{flex:1}
+  .ed-formbtns{display:flex;gap:10px;margin-top:16px}
+  .ed-formbtns .metalBtn,.ed-formbtns .ghostBtn{width:auto;padding:12px 18px}
   .hidden{display:none}
 </style>
 </head>
@@ -180,6 +202,7 @@
     <div class="hdr-right">
       <span class="premium-pill" id="premPill">Premium</span>
       <div class="userbox" id="userBox">
+        <button class="editlink" id="editLink" style="display:none">✎ Edit bank</button>
         <div class="uinfo"><div class="nm" id="uName">—</div><div class="lv" id="uLevel">Lv 1 · 0 XP</div></div>
         <div class="uavatar" id="uAvatar">—</div>
         <button class="logout" id="logoutBtn">Log out</button>
@@ -277,11 +300,34 @@
     </div>
   </section>
 
+  <!-- ===== EDITOR (admin) ===== -->
+  <section id="editor" class="hidden">
+    <div class="panel">
+      <div class="ed-top">
+        <h2 style="margin:0;color:var(--muted)">Question editor</h2>
+        <div class="ed-actions">
+          <button class="ghostBtn ed-btn" id="edExport">⬇ Export index.html</button>
+          <button class="ghostBtn ed-btn" id="edReset">Reset</button>
+          <button class="ghostBtn ed-btn" id="edDone">Done</button>
+        </div>
+      </div>
+      <div class="seg small" id="edStreamSeg" style="margin-top:14px">
+        <button data-stream="cardio" class="active">Cardiorespiratory</button>
+        <button data-stream="msk">Musculoskeletal</button>
+        <button data-stream="neuro">Neurological</button>
+        <button data-stream="anatomy">Anatomy</button>
+      </div>
+      <div id="edBody"></div>
+    </div>
+    <p class="disclaimer">Edits save in this browser. Click “Export index.html”, then re-upload it to GitHub to publish for everyone. A physiotherapist should approve content before it goes live.</p>
+  </section>
+
 </div>
 
 <script>
-/* ===================== QUESTION BANK (20 per stream) ===================== */
-const BANK = {
+/* ===================== QUESTION BANK ===================== */
+/*BANK_START*/
+const BASE_BANK = {
 cardio:[
  {d:"Easy",q:"What is the normal resting respiratory rate for a healthy adult?",o:["12–20 breaths/min","20–30 breaths/min","4–10 breaths/min","30–40 breaths/min"],a:0,e:"A normal adult resting respiratory rate is 12–20 breaths/min. Above 20 is tachypnoea; below 12 is bradypnoea."},
  {d:"Easy",q:"What does SpO₂ measure?",o:["Arterial CO₂ level","Peripheral oxygen saturation of haemoglobin","Tidal volume","Lung compliance"],a:1,e:"SpO₂ is the peripheral oxygen saturation of haemoglobin, measured non-invasively by pulse oximetry. Normal is generally ≥95%."},
@@ -451,11 +497,20 @@ anatomy:[
  {d:"Easy",q:"The bones of the forearm are the:",o:["Tibia and fibula","Radius and ulna","Humerus and radius","Femur and patella"],a:1,e:"The forearm contains the radius (lateral, thumb side) and ulna (medial); the radius rotates around the ulna in pronation/supination."}
 ]
 };
+/*BANK_END*/
 
 /* ===================== STATE ===================== */
 const SL={cardio:"Cardiorespiratory",msk:"Musculoskeletal",neuro:"Neurological",anatomy:"Anatomy"};
 const PTS={Easy:10,Medium:20,Hard:30};
 const $=s=>document.querySelector(s);
+const SELF_HTML="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
+const ADMIN_EMAILS=["prodbysanj@gmail.com"];
+function loadBank(){try{const b=JSON.parse(localStorage.getItem("prx_bank"));if(b&&b.cardio&&b.cardio.length)return b;}catch(e){}return JSON.parse(JSON.stringify(BASE_BANK));}
+function saveBank(){try{localStorage.setItem("prx_bank",JSON.stringify(BANK));}catch(e){}}
+let BANK=loadBank();
+function escapeHtml(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function escapeAttr(s){return escapeHtml(s).replace(/"/g,"&quot;");}
+function isAdmin(){return user && user.email && ADMIN_EMAILS.indexOf(user.email.toLowerCase())>-1;}
 let authMode="signin";
 let sel={stream:"cardio",diff:"all"}, game=null;
 let profile=loadProfile(), user=loadUser();
@@ -504,6 +559,7 @@ function enterApp(){
   $("#uName").textContent="Hi, "+firstName(user.name);
   $("#uAvatar").textContent=initials(user.name);
   renderUserMeta();
+  $("#editLink").style.display = isAdmin() ? "" : "none";
   $("#menu").classList.remove("hidden");
   hint();
 }
@@ -578,6 +634,18 @@ function finish(){
 }
 $("#againBtn").onclick=start;
 $("#menuBtn").onclick=()=>{$("#results").classList.add("hidden");$("#menu").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});};
+
+/* ===================== EDITOR (admin) ===================== */
+let edState={stream:"cardio"};
+function openEditor(){$("#menu").classList.add("hidden");$("#quiz").classList.add("hidden");$("#results").classList.add("hidden");$("#editor").classList.remove("hidden");document.querySelectorAll('#edStreamSeg button').forEach(x=>x.classList.toggle('active',x.dataset.stream===edState.stream));edList();window.scrollTo({top:0,behavior:"smooth"});}
+function edDone(){$("#editor").classList.add("hidden");$("#menu").classList.remove("hidden");hint();window.scrollTo({top:0,behavior:"smooth"});}
+function edList(){const s=edState.stream,arr=BANK[s];let h='<div class="ed-listhead"><span>'+arr.length+' questions · '+SL[s]+'</span><button class="metalBtn" id="edAdd" style="width:auto;padding:9px 14px">+ Add question</button></div><div class="ed-list">';arr.forEach(function(q,i){h+='<div class="qrow"><div class="qrow-main"><span class="qrow-d d-'+q.d+'">'+q.d+'</span><span class="qrow-q">'+escapeHtml(q.q)+'</span></div><div class="qrow-act"><button data-i="'+i+'" class="ed-edit">Edit</button><button data-i="'+i+'" class="ed-del">Delete</button></div></div>';});h+='</div>';$("#edBody").innerHTML=h;$("#edAdd").onclick=function(){edForm(null);};$("#edBody").querySelectorAll(".ed-edit").forEach(function(b){b.onclick=function(){edForm(parseInt(b.dataset.i));};});$("#edBody").querySelectorAll(".ed-del").forEach(function(b){b.onclick=function(){edDelete(parseInt(b.dataset.i));};});}
+function edForm(index){const s=edState.stream,editing=index!=null,q=editing?BANK[s][index]:{d:"Medium",q:"",o:["","","",""],a:0,e:""},keys=["A","B","C","D"];let h='<div class="ed-form"><div style="font-size:12px;color:var(--muted);margin-bottom:10px">'+(editing?'Editing Q'+(index+1):'New question')+' · '+SL[s]+'</div>';h+='<label class="lbl">Difficulty</label><select id="efD">'+["Easy","Medium","Hard"].map(function(d){return '<option'+(q.d===d?' selected':'')+'>'+d+'</option>';}).join('')+'</select>';h+='<label class="lbl" style="margin-top:12px">Question</label><textarea id="efQ">'+escapeHtml(q.q)+'</textarea>';h+='<label class="lbl" style="margin-top:12px">Options — tick the correct answer</label>';for(let n=0;n<4;n++){h+='<div class="ed-opt"><input type="radio" name="efA" value="'+n+'"'+(q.a===n?' checked':'')+'><span class="ed-key">'+keys[n]+'</span><input type="text" id="efO'+n+'" value="'+escapeAttr(q.o[n]||"")+'"></div>';}h+='<label class="lbl" style="margin-top:12px">Explanation</label><textarea id="efE">'+escapeHtml(q.e)+'</textarea>';h+='<div class="ed-formbtns"><button class="metalBtn" id="efSave">Save question</button><button class="ghostBtn" id="efCancel">Cancel</button></div><div class="err" id="efErr"></div></div>';$("#edBody").innerHTML=h;$("#efCancel").onclick=edList;$("#efSave").onclick=function(){const o=[0,1,2,3].map(function(n){return document.getElementById("efO"+n).value.trim();});const a=document.querySelector('input[name=efA]:checked');const qt=$("#efQ").value.trim(),et=$("#efE").value.trim(),d=$("#efD").value;if(!qt){$("#efErr").textContent="Enter the question text.";return;}if(o.some(function(x){return !x;})){$("#efErr").textContent="Fill in all four options.";return;}if(!a){$("#efErr").textContent="Select the correct answer.";return;}const obj={d:d,q:qt,o:o,a:parseInt(a.value),e:et};if(editing)BANK[s][index]=obj;else BANK[s].push(obj);saveBank();edList();};}
+function edDelete(i){if(!confirm("Delete this question?"))return;BANK[edState.stream].splice(i,1);saveBank();edList();}
+function edExport(){const lit="/*BANK_START*/\nconst BASE_BANK = "+JSON.stringify(BANK,null,1)+";\n/*BANK_END*/";const out=SELF_HTML.replace(/\/\*BANK_START\*\/[\s\S]*?\/\*BANK_END\*\//,function(){return lit;});const blob=new Blob([out],{type:"text/html"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="index.html";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},3000);toast("Downloaded index.html — re-upload it to GitHub to publish.");}
+function edReset(){if(!confirm("Reset all questions back to the built-in set? This clears edits saved in this browser."))return;try{localStorage.removeItem("prx_bank");}catch(e){}BANK=JSON.parse(JSON.stringify(BASE_BANK));saveBank();edList();}
+document.querySelectorAll('#edStreamSeg button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#edStreamSeg button').forEach(function(x){x.classList.remove('active');});b.classList.add('active');edState.stream=b.dataset.stream;edList();};});
+$("#edDone").onclick=edDone;$("#edExport").onclick=edExport;$("#edReset").onclick=edReset;$("#editLink").onclick=openEditor;
 
 /* ===================== INIT ===================== */
 if(user && user.email){ enterApp(); } else { $("#userBox").classList.remove("show"); }
