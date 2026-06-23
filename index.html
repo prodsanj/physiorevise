@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhysioRevise AU — Premium</title>
+<style>
+  :root{
+    --bg:#0a0a0b; --panel:#141417; --panel2:#1b1b1f; --line:#2a2a30; --line2:#3a3a42;
+    --text:#eef0f3; --muted:#9598a0;
+    --silver1:#f4f6f9; --silver2:#c4c8d0; --silver3:#8a8f99;
+    --metal:linear-gradient(135deg,#f4f6f9,#c4c8d0 48%,#9aa0aa);
+    --accent:#cfd4dc; --good:#74c9a3; --bad:#e08585; --warn:#cfd4dc;
+    --radius:14px; --shadow:0 10px 40px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--text);line-height:1.55;min-height:100vh;
+    background:
+      radial-gradient(1100px 500px at 50% -10%,rgba(196,200,208,.10),transparent 60%),
+      radial-gradient(800px 600px at 90% 110%,rgba(196,200,208,.05),transparent 60%),
+      #0a0a0b;}
+  .wrap{max-width:680px;margin:0 auto;padding:26px 18px 70px}
+
+  /* metal text */
+  .metal{background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* header */
+  header.top{display:flex;align-items:center;gap:13px;margin-bottom:6px}
+  .crest{width:44px;height:44px;border-radius:12px;position:relative;background:#141417;border:1px solid var(--line2);
+    display:flex;align-items:center;justify-content:center}
+  .crest span{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:22px;background:var(--metal);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .crest:after{content:"";position:absolute;inset:3px;border-radius:9px;border:1px solid rgba(196,200,208,.18)}
+  .wordmark{font-size:18px;font-weight:700;letter-spacing:3px;text-transform:uppercase}
+  .wordmark .au{font-weight:400;letter-spacing:2px}
+  .sub{color:var(--muted);font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px}
+  .hdr-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+  .premium-pill{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--silver2);
+    border:1px solid var(--line2);border-radius:999px;padding:5px 11px;background:linear-gradient(180deg,#1a1a1e,#101013)}
+  .userbox{display:none;align-items:center;gap:10px}
+  .userbox.show{display:flex}
+  .uavatar{width:34px;height:34px;border-radius:50%;background:#15151a;border:1px solid var(--line2);
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--silver2)}
+  .uinfo{text-align:right;line-height:1.2}
+  .uinfo .nm{font-size:13px;font-weight:600}
+  .uinfo .lv{font-size:11px;color:var(--muted)}
+  .logout{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;text-decoration:underline;padding:4px}
+  .logout:hover{color:var(--text)}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent);margin:18px 0 2px}
+
+  /* panels */
+  .panel{background:linear-gradient(180deg,#141417,#101013);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;margin-top:18px;box-shadow:var(--shadow)}
+  .panel h2{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin:0 0 16px;font-weight:700}
+  label.lbl{display:block;font-size:12px;font-weight:600;letter-spacing:.4px;margin-bottom:8px;color:#c7cad1}
+  .field{margin-bottom:18px}
+  input[type=text],input[type=email],input[type=password]{width:100%;background:#0e0e10;color:var(--text);
+    border:1px solid var(--line2);padding:13px 14px;border-radius:10px;font-size:14px;transition:.15s}
+  input::placeholder{color:#5d6068}
+  input:focus{outline:none;border-color:var(--silver2);box-shadow:0 0 0 3px rgba(196,200,208,.12)}
+
+  .seg{display:flex;flex-wrap:wrap;gap:8px}
+  .seg button{flex:1;min-width:130px;background:#15151a;color:var(--text);border:1px solid var(--line2);
+    padding:12px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;transition:.15s;text-align:center}
+  .seg button:hover{border-color:var(--silver3)}
+  .seg button.active{border-color:var(--silver2);background:linear-gradient(180deg,#23232a,#17171b);color:#fff;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+  .seg.small button{flex:0 1 auto;min-width:0;padding:9px 16px}
+
+  .metalBtn{width:100%;background:var(--metal);color:#141417;border:none;padding:15px;border-radius:11px;
+    font-size:15px;font-weight:800;letter-spacing:.4px;cursor:pointer;box-shadow:0 4px 18px rgba(196,200,208,.12)}
+  .metalBtn:hover{filter:brightness(1.05)}
+  .ghostBtn{width:100%;background:#15151a;color:var(--text);border:1px solid var(--line2);padding:13px;border-radius:11px;
+    font-size:14px;font-weight:600;cursor:pointer}
+  .ghostBtn:hover{border-color:var(--silver3)}
+  .hint{font-size:12px;color:var(--muted);margin-top:12px;text-align:center;letter-spacing:.3px}
+  .err{color:var(--bad);font-size:12.5px;margin-top:10px;text-align:center;min-height:16px}
+
+  /* login gate */
+  #gate .lead{text-align:center;margin-top:8px}
+  #gate .lead .big{font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:.5px;margin:14px 0 4px}
+  #gate .lead p{color:var(--muted);font-size:13.5px;margin:0;letter-spacing:.3px}
+  .tabs{display:flex;gap:0;border:1px solid var(--line2);border-radius:10px;overflow:hidden;margin-bottom:18px}
+  .tabs button{flex:1;background:#121215;color:var(--muted);border:none;padding:12px;font-size:13.5px;font-weight:700;
+    letter-spacing:.5px;cursor:pointer}
+  .tabs button.active{background:linear-gradient(180deg,#23232a,#17171b);color:#fff}
+  .features{display:flex;justify-content:center;gap:22px;margin-top:16px;flex-wrap:wrap}
+  .features span{font-size:11.5px;color:var(--muted);letter-spacing:.5px}
+  .features b{color:var(--silver2);font-weight:600}
+
+  /* HUD */
+  .hud{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,#141417,#101013);border:1px solid var(--line);
+    border-radius:14px;padding:13px 15px;margin-top:18px;box-shadow:var(--shadow);flex-wrap:wrap}
+  .hud .block{display:flex;flex-direction:column;gap:2px}
+  .hud .lab{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700}
+  .hud .val{font-size:17px;font-weight:800}
+  .streak{display:flex;align-items:center;gap:7px}
+  .flame{font-size:18px;filter:grayscale(1) brightness(1.4);opacity:.4;transition:.2s}
+  .flame.lit{filter:grayscale(.2) brightness(1.5);opacity:1;animation:flick .9s infinite alternate}
+  @keyframes flick{from{transform:scale(1)}to{transform:scale(1.14)}}
+  .mult{font-size:12px;font-weight:800;color:#15151a;background:var(--metal);padding:2px 9px;border-radius:999px}
+  .xpwrap{flex:1;min-width:130px}
+  .xpbar{height:8px;background:#0e0e10;border-radius:999px;overflow:hidden;border:1px solid var(--line2);margin-top:6px}
+  .xpfill{height:100%;width:0;background:var(--metal);transition:width .5s}
+  .progress{height:6px;background:#0e0e10;border-radius:999px;overflow:hidden;border:1px solid var(--line2);margin-top:14px}
+  .progfill{height:100%;width:0;background:var(--metal);transition:width .4s}
+
+  /* question */
+  .qcard{background:linear-gradient(180deg,#141417,#101013);border:1px solid var(--line);border-radius:var(--radius);
+    padding:24px;margin-top:14px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .qmeta{display:flex;gap:8px;align-items:center;margin-bottom:16px}
+  .tag{font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 10px;border-radius:6px;border:1px solid var(--line2)}
+  .tag.stream{color:var(--silver2)}
+  .tag.d-Easy{color:var(--good);border-color:rgba(116,201,163,.35)}
+  .tag.d-Medium{color:var(--silver2)}
+  .tag.d-Hard{color:var(--bad);border-color:rgba(224,133,133,.35)}
+  .qnum{margin-left:auto;color:var(--muted);font-size:13px;font-weight:600}
+  .qtext{font-size:17px;font-weight:600;margin:2px 0 18px;letter-spacing:.2px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{display:flex;gap:12px;align-items:center;background:#0f0f12;border:1px solid var(--line2);
+    padding:14px;border-radius:10px;cursor:pointer;transition:.12s}
+  .opt:hover{border-color:var(--silver3)}
+  .opt .key{font-weight:700;color:var(--silver2);width:18px;flex:none}
+  .opt .txt{flex:1}
+  .opt .mark{flex:none;font-weight:800;font-size:18px;opacity:0;transition:.12s}
+  .opt.correct{border-color:var(--good);background:rgba(116,201,163,.10)}
+  .opt.correct .mark{opacity:1;color:var(--good)}
+  .opt.wrong{border-color:var(--bad);background:rgba(224,133,133,.10)}
+  .opt.wrong .mark{opacity:1;color:var(--bad)}
+  .opt.disabled{cursor:default;pointer-events:none}
+  .explain{display:none;margin-top:16px;border-top:1px solid var(--line2);padding-top:14px;font-size:14px;color:#d4d7dd}
+  .explain.show{display:block;animation:fade .3s}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  .explain h4{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+  .explain.ok h4{color:var(--good)} .explain.no h4{color:var(--bad)}
+  .nextBtn{margin-top:18px;width:100%;background:var(--metal);color:#141417;border:none;padding:14px;border-radius:11px;font-size:15px;font-weight:800;cursor:pointer}
+  .nextBtn:hover{filter:brightness(1.05)}
+  .float{position:absolute;right:24px;top:62px;font-size:24px;font-weight:900;pointer-events:none;
+    background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;animation:floatUp 1s ease-out forwards}
+  @keyframes floatUp{0%{opacity:0;transform:translateY(10px) scale(.8)}20%{opacity:1}100%{opacity:0;transform:translateY(-34px) scale(1.1)}}
+
+  .toast{position:absolute;left:50%;top:10px;transform:translateX(-50%) translateY(-80px);
+    background:var(--metal);color:#141417;font-weight:800;letter-spacing:.3px;padding:12px 22px;border-radius:999px;
+    box-shadow:var(--shadow);opacity:0;transition:.4s;z-index:50}
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+  /* results */
+  .results{text-align:center}
+  .scoreBig{font-size:48px;font-weight:900;margin:6px 0;background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stars{font-size:32px;letter-spacing:8px;margin:6px 0 4px}
+  .star-on{color:var(--silver1)} .star-off{color:#33343c}
+  .statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+  .stat{background:#0f0f12;border:1px solid var(--line2);border-radius:11px;padding:15px}
+  .stat .v{font-size:22px;font-weight:800}
+  .stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+  .badges{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:16px 0 4px}
+  .badge{background:#0f0f12;border:1px solid var(--line2);border-radius:12px;padding:11px 15px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .badge .ic{font-size:18px}
+  .badge.lock{opacity:.4}
+  .rbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .rbtns button{flex:1;min-width:140px;padding:14px;border-radius:11px;font-size:14.5px;font-weight:700;cursor:pointer}
+  .rbtns .again{background:var(--metal);border:none;color:#141417}
+  .rbtns .menu{background:#15151a;color:var(--text);border:1px solid var(--line2)}
+
+  .disclaimer{color:#82858d;font-size:11.5px;text-align:center;margin-top:18px;letter-spacing:.3px;line-height:1.6}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="toast" id="toast"></div>
+
+  <header class="top">
+    <div class="crest"><span>P</span></div>
+    <div>
+      <div class="wordmark">Physio<span class="metal">Revise</span> <span class="au metal">AU</span></div>
+      <div class="sub">Clinical mastery · Premium</div>
+    </div>
+    <div class="hdr-right">
+      <span class="premium-pill" id="premPill">Premium</span>
+      <div class="userbox" id="userBox">
+        <div class="uinfo"><div class="nm" id="uName">—</div><div class="lv" id="uLevel">Lv 1 · 0 XP</div></div>
+        <div class="uavatar" id="uAvatar">—</div>
+        <button class="logout" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+  </header>
+  <div class="divider"></div>
+
+  <!-- ===== LOGIN GATE ===== -->
+  <section id="gate">
+    <div class="lead">
+      <div class="big metal">Master your physiotherapy exams.</div>
+      <p>Sign in to access the premium question bank.</p>
+    </div>
+    <div class="panel">
+      <div class="tabs" id="authTabs">
+        <button data-mode="signin" class="active">Sign in</button>
+        <button data-mode="signup">Create account</button>
+      </div>
+      <div class="field" id="nameField" style="display:none">
+        <label class="lbl">Full name</label>
+        <input type="text" id="inName" placeholder="e.g. Jordan Smith" autocomplete="name">
+      </div>
+      <div class="field">
+        <label class="lbl">University email</label>
+        <input type="email" id="inEmail" placeholder="you@student.edu.au" autocomplete="email">
+      </div>
+      <div class="field">
+        <label class="lbl">Password</label>
+        <input type="password" id="inPass" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="metalBtn" id="authBtn">Sign in</button>
+      <div class="err" id="authErr"></div>
+      <div class="features">
+        <span><b>80+</b> exam questions</span>
+        <span><b>4</b> clinical streams</span>
+        <span><b>XP</b> &amp; achievements</span>
+      </div>
+    </div>
+    <p class="disclaimer">⚠ Prototype. This is a demo login — no real account is created and any email/password will sign you in. The live product will use secure Australian-hosted authentication.</p>
+  </section>
+
+  <!-- ===== MENU ===== -->
+  <section id="menu" class="hidden">
+    <div class="panel">
+      <h2>Begin a session</h2>
+      <div class="field"><label class="lbl">Stream</label>
+        <div class="seg" id="streamSeg">
+          <button data-stream="cardio" class="active">Cardiorespiratory</button>
+          <button data-stream="msk">Musculoskeletal</button>
+          <button data-stream="neuro">Neurological</button>
+          <button data-stream="anatomy">Anatomy</button>
+        </div>
+      </div>
+      <div class="field"><label class="lbl">Difficulty</label>
+        <div class="seg small" id="diffSeg">
+          <button data-diff="all" class="active">Mixed</button>
+          <button data-diff="Easy">Easy</button>
+          <button data-diff="Medium">Medium</button>
+          <button data-diff="Hard">Hard</button>
+        </div>
+      </div>
+      <button class="metalBtn" id="startBtn">Start session</button>
+      <div class="hint" id="menuHint"></div>
+    </div>
+    <p class="disclaimer">80 sample questions across four streams · illustrative content, physio-reviewed in the live product · not clinical or exam advice.</p>
+  </section>
+
+  <!-- ===== QUIZ ===== -->
+  <section id="quiz" class="hidden">
+    <div class="hud">
+      <div class="block"><span class="lab">Score</span><span class="val metal" id="hudScore">0</span></div>
+      <div class="block"><span class="lab">Streak</span><span class="val streak"><span class="flame" id="flame">🔥</span><span id="hudStreak">0</span><span class="mult" id="hudMult" style="display:none">×2</span></span></div>
+      <div class="block xpwrap"><span class="lab" id="xpLab">Level 1</span><div class="xpbar"><div class="xpfill" id="xpFill"></div></div></div>
+    </div>
+    <div class="progress"><div class="progfill" id="progFill"></div></div>
+    <div id="qHost"></div>
+  </section>
+
+  <!-- ===== RESULTS ===== -->
+  <section id="results" class="hidden">
+    <div class="panel results">
+      <h2 style="margin-bottom:4px">Session complete</h2>
+      <div class="stars" id="rStars"></div>
+      <div class="scoreBig" id="rScore">0</div>
+      <div style="color:var(--muted);font-size:12.5px;letter-spacing:.5px">POINTS THIS SESSION</div>
+      <div class="statgrid">
+        <div class="stat"><div class="v" id="rAcc">0%</div><div class="l">Accuracy</div></div>
+        <div class="stat"><div class="v" id="rCorrect">0/0</div><div class="l">Correct</div></div>
+        <div class="stat"><div class="v" id="rStreak">0</div><div class="l">Best streak</div></div>
+        <div class="stat"><div class="v" id="rXp">+0</div><div class="l">XP gained</div></div>
+      </div>
+      <div class="badges" id="rBadges"></div>
+      <div class="rbtns"><button class="again" id="againBtn">Play again</button><button class="menu" id="menuBtn">Change stream</button></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ===================== QUESTION BANK (20 per stream) ===================== */
+const BANK = {
+cardio:[
+ {d:"Easy",q:"What is the normal resting respiratory rate for a healthy adult?",o:["12–20 breaths/min","20–30 breaths/min","4–10 breaths/min","30–40 breaths/min"],a:0,e:"A normal adult resting respiratory rate is 12–20 breaths/min. Above 20 is tachypnoea; below 12 is bradypnoea."},
+ {d:"Easy",q:"What does SpO₂ measure?",o:["Arterial CO₂ level","Peripheral oxygen saturation of haemoglobin","Tidal volume","Lung compliance"],a:1,e:"SpO₂ is the peripheral oxygen saturation of haemoglobin, measured non-invasively by pulse oximetry. Normal is generally ≥95%."},
+ {d:"Easy",q:"Which muscle is the primary muscle of inspiration?",o:["Rectus abdominis","Diaphragm","Internal intercostals","Latissimus dorsi"],a:1,e:"The diaphragm is the primary muscle of inspiration, accounting for most tidal breathing at rest."},
+ {d:"Easy",q:"On auscultation, a wheeze most likely indicates:",o:["Pleural inflammation","Airway narrowing / bronchospasm","Lobar collapse","Normal breath sounds"],a:1,e:"Wheeze is a continuous musical sound caused by airflow through narrowed airways, e.g. bronchospasm in asthma/COPD."},
+ {d:"Easy",q:"Pursed-lip breathing helps a patient with COPD mainly by:",o:["Increasing respiratory rate","Generating back-pressure to keep airways open on expiration","Increasing CO₂ retention","Strengthening the diaphragm"],a:1,e:"Pursed-lip breathing creates positive expiratory back-pressure that splints airways open, reducing air trapping and easing breathlessness."},
+ {d:"Easy",q:"Which position typically eases breathlessness for a patient with COPD?",o:["Flat supine","Forward-lean sitting (tripod position)","Head-down tilt","Lying prone"],a:1,e:"Forward-lean sitting fixes the shoulder girdle and optimises accessory muscle use, easing the work of breathing."},
+ {d:"Easy",q:"Which device delivers a precise, fixed concentration of oxygen?",o:["Nasal cannula","Venturi mask","Simple face mask","Non-rebreather bag"],a:1,e:"A Venturi mask entrains air at a fixed ratio to deliver a precise FiO₂, useful where controlled oxygen is needed (e.g. COPD)."},
+ {d:"Medium",q:"A patient with an acute COPD exacerbation has thick, retained secretions and fatigues quickly. Best first-line airway clearance?",o:["Active Cycle of Breathing Technique (ACBT)","High-intensity continuous exercise","Steep head-down postural drainage","Prolonged breath-holds"],a:0,e:"ACBT is paced, flexible and effective for retained secretions while allowing rest — ideal for a fatiguing patient."},
+ {d:"Medium",q:"Coarse crackles that clear with coughing in the right lower zone most likely indicate:",o:["Pleural effusion","Loose secretions in larger airways","Pneumothorax","Bronchospasm"],a:1,e:"Coarse crackles that change/clear with coughing suggest mobile secretions in larger airways."},
+ {d:"Medium",q:"For an adult with right lower lobe consolidation, which position best optimises V/Q matching?",o:["Right (affected) side lying","Left side lying — 'good lung down'","Supine flat","Head-down on the right"],a:1,e:"In adults, the dependent lung is better perfused, so placing the healthy lung down ('good lung down') improves V/Q matching and oxygenation."},
+ {d:"Medium",q:"The main aim of incentive spirometry after surgery is to:",o:["Clear secretions by suction","Improve lung volumes and prevent atelectasis","Reduce respiratory rate","Measure peak expiratory flow"],a:1,e:"Incentive spirometry encourages sustained maximal inspiration to expand the lungs and prevent post-operative atelectasis."},
+ {d:"Medium",q:"Why is a 'huff' (forced expiration technique) often preferred over a forceful cough to clear secretions?",o:["It is louder","It causes less airway collapse and fatigue","It needs no patient effort","It always removes more sputum"],a:1,e:"Huffing keeps the glottis open, generating airflow with less dynamic airway collapse and less fatigue than a hard cough."},
+ {d:"Medium",q:"Type 2 respiratory failure is characterised on arterial blood gas by:",o:["Low O₂ with normal/low CO₂","Low O₂ with high CO₂ (hypercapnia)","High O₂ with high CO₂","Normal gases"],a:1,e:"Type 2 (ventilatory) failure shows hypoxaemia plus hypercapnia (raised PaCO₂), reflecting inadequate alveolar ventilation."},
+ {d:"Hard",q:"ABG: pH 7.30, PaCO₂ 60 mmHg, HCO₃⁻ 25 mmol/L. This is best described as:",o:["Metabolic acidosis","Acute respiratory acidosis (uncompensated)","Respiratory alkalosis","Fully compensated alkalosis"],a:1,e:"Low pH with high PaCO₂ and near-normal bicarbonate indicates an acute, uncompensated respiratory acidosis (hypoventilation)."},
+ {d:"Hard",q:"How does CPAP improve oxygenation in a hypoxaemic patient?",o:["By delivering 100% oxygen only","By maintaining positive airway pressure to recruit alveoli and raise FRC","By actively pushing secretions out","By lowering blood CO₂ directly"],a:1,e:"CPAP holds positive pressure throughout the cycle, recruiting collapsed alveoli and increasing functional residual capacity, improving gas exchange."},
+ {d:"Hard",q:"Which is a contraindication to head-down (Trendelenburg) postural drainage?",o:["Mild productive cough","Raised intracranial pressure","Stable COPD","Lower lobe secretions"],a:1,e:"Head-down positioning can further raise intracranial pressure and is contraindicated in such patients (also caution with reflux, severe cardiac failure, recent haemoptysis)."},
+ {d:"Hard",q:"When a supine, drowsy patient aspirates, which region is most commonly affected due to bronchial anatomy?",o:["Left upper lobe","Right lung (more vertical, wider main bronchus)","Lingula","Apices bilaterally"],a:1,e:"The right main bronchus is wider and more vertical, so aspirated material preferentially enters the right lung (posterior segments when supine)."},
+ {d:"Hard",q:"During mobilisation of a post-op cardiac patient, which finding most strongly requires you to STOP and escalate?",o:["SpO₂ falls 98%→95%","RPE 4/10","New chest pain with ST-segment changes","HR rises 20 bpm above rest"],a:2,e:"New chest pain with ECG changes is an absolute stop/escalate sign; the other responses are within acceptable monitored-exercise limits."},
+ {d:"Hard",q:"The strongest evidence-based benefit of pulmonary rehabilitation in COPD is:",o:["Cure of airflow obstruction","Improved exercise capacity and quality of life","Permanent rise in FEV₁","Elimination of all sputum"],a:1,e:"Pulmonary rehab does not reverse airflow obstruction but reliably improves exercise capacity, dyspnoea and quality of life."},
+ {d:"Medium",q:"A post-op patient shows rising respiratory rate, falling SpO₂ and increasing accessory muscle use. This pattern suggests:",o:["Normal recovery","Impending respiratory compromise needing escalation","Over-oxygenation","Resolving atelectasis"],a:1,e:"Rising work of breathing with falling saturations signals deterioration — reassess, optimise treatment and escalate promptly."}
+],
+msk:[
+ {d:"Easy",q:"What does the acronym RICE stand for in acute soft-tissue injury?",o:["Rest, Ice, Compression, Elevation","Rotate, Ice, Compress, Exercise","Rest, Immobilise, Cast, Elevate","Run, Ice, Cool, Eat"],a:0,e:"RICE = Rest, Ice, Compression, Elevation — traditional early management of acute soft-tissue injury (now often framed within POLICE/PEACE & LOVE)."},
+ {d:"Easy",q:"To which muscle group does supraspinatus belong?",o:["Hamstrings","Rotator cuff","Hip flexors","Erector spinae"],a:1,e:"Supraspinatus is one of the four rotator cuff (SITS) muscles stabilising the glenohumeral joint."},
+ {d:"Easy",q:"Approximately what is normal knee flexion range of motion?",o:["About 90°","About 135°","About 180°","About 45°"],a:1,e:"Normal active knee flexion is roughly 135° (greater passively), allowing squatting and stair function."},
+ {d:"Easy",q:"Delayed-onset muscle soreness (DOMS) typically peaks at:",o:["Immediately after exercise","24–72 hours after exercise","1 week after exercise","Only during exercise"],a:1,e:"DOMS from unaccustomed/eccentric exercise usually peaks 24–72 hours later and settles within days."},
+ {d:"Easy",q:"Lateral epicondylalgia ('tennis elbow') produces pain on:",o:["Resisted wrist flexion","Resisted wrist extension and gripping","Passive shoulder abduction","Neck rotation"],a:1,e:"Tennis elbow involves the common extensor origin; pain is provoked by resisted wrist/finger extension and gripping."},
+ {d:"Easy",q:"The most appropriate early (0–2 week) goal after a grade II ankle inversion sprain is to:",o:["Stretch aggressively into inversion","Protect, control swelling and restore pain-free range","Begin single-leg hop testing","Strengthen maximally to fatigue"],a:1,e:"Early management protects healing tissue while controlling swelling and restoring pain-free movement; high loads come later."},
+ {d:"Easy",q:"Which special test assesses the meniscus of the knee?",o:["Lachman's test","McMurray's test","Thomas test","Hawkins–Kennedy test"],a:1,e:"McMurray's test assesses meniscal tears via rotation under load. Lachman's tests the ACL; Hawkins–Kennedy the shoulder."},
+ {d:"Medium",q:"A 24-year-old reports a 'pop', immediate knee swelling and giving-way. The MOST sensitive clinical test for the likely injury is:",o:["McMurray's test","Lachman's test","Patellar apprehension test","Thomas test"],a:1,e:"The history suggests ACL rupture; Lachman's is the most sensitive clinical test for ACL integrity."},
+ {d:"Medium",q:"Which clinical decision rule guides the need for X-ray after an acute ankle injury?",o:["Ottawa Ankle Rules","Canadian C-Spine Rule","Wells Score","Centor Criteria"],a:0,e:"The Ottawa Ankle Rules use bony tenderness and weight-bearing ability to decide if ankle/foot radiography is needed."},
+ {d:"Medium",q:"Painful resisted external rotation plus a positive Hawkins–Kennedy test most suggests:",o:["Adhesive capsulitis","Rotator cuff–related (subacromial) shoulder pain","Acromioclavicular joint sprain","Cervical radiculopathy"],a:1,e:"This pattern points to rotator cuff–related/subacromial pain. Adhesive capsulitis limits passive ROM globally; radiculopathy gives neuro signs."},
+ {d:"Medium",q:"The current best-evidence cornerstone of managing chronic tendinopathy is:",o:["Complete rest until pain-free","Progressive loading (resistance) exercise","Long-term passive ultrasound","Permanent bracing"],a:1,e:"Progressive, graduated loading exercise is the most strongly supported intervention for tendinopathy; prolonged rest deconditions the tendon."},
+ {d:"Medium",q:"A positive empty-can (Jobe) test most implicates which muscle?",o:["Subscapularis","Supraspinatus","Pectoralis major","Biceps brachii"],a:1,e:"The empty-can test loads supraspinatus; pain/weakness suggests supraspinatus pathology."},
+ {d:"Medium",q:"Adhesive capsulitis ('frozen shoulder') is characterised by:",o:["Loss of passive ROM, especially external rotation","Normal passive ROM with weakness only","Pain solely at the AC joint","Neurological arm symptoms"],a:0,e:"Adhesive capsulitis causes global loss of passive range, with external rotation typically most restricted, due to capsular contracture."},
+ {d:"Hard",q:"Which is a commonly used criterion before clearing return-to-sport after ACL reconstruction?",o:["Pain-free walking only","Limb Symmetry Index ≥90% on strength and hop tests","Full ROM at 2 weeks","Surgeon sign-off alone at 6 weeks"],a:1,e:"Return-to-sport decisions commonly require a Limb Symmetry Index ≥90% across strength and hop test batteries, alongside time and psychological readiness."},
+ {d:"Hard",q:"The close-packed (most stable) position of the knee is:",o:["Full flexion with medial rotation","Full extension with lateral rotation","30° flexion","Mid-range neutral"],a:1,e:"The knee's close-packed position is full extension with lateral (external) tibial rotation — the 'screw-home' mechanism locks the joint."},
+ {d:"Hard",q:"In the capsular pattern of the hip, which movement is characteristically MOST limited?",o:["Internal rotation","Adduction","External rotation only","Flexion only"],a:0,e:"The hip capsular pattern classically shows greatest limitation of internal rotation (with extension and abduction also restricted)."},
+ {d:"Hard",q:"A patient has lateral hip/buttock pain and a positive Trendelenburg sign. Which muscle is most implicated?",o:["Iliopsoas","Gluteus medius","Rectus femoris","Adductor longus"],a:1,e:"A positive Trendelenburg indicates hip abductor (chiefly gluteus medius) weakness or insufficiency, dropping the contralateral pelvis."},
+ {d:"Hard",q:"Initial physiotherapy management of acute lumbar disc–related radiculopathy (no red flags) should emphasise:",o:["Strict bed rest for two weeks","Education, relative activity, directional preference exercise and neural mobilisation","Immediate spinal manipulation under anaesthetic","Avoidance of all movement"],a:1,e:"Evidence favours staying active with education, directional-preference exercises and graded neural mobilisation; strict bed rest worsens outcomes."},
+ {d:"Medium",q:"Which red flag from a low back pain history most strongly suggests cauda equina syndrome?",o:["Pain worse in the morning","Saddle anaesthesia with new bladder dysfunction","Unilateral calf tightness","Pain eased by walking"],a:1,e:"Saddle anaesthesia plus bladder/bowel disturbance (often with bilateral leg symptoms) is a cauda equina red flag requiring urgent referral."},
+ {d:"Medium",q:"Initial exercise management of patellofemoral pain is best directed at:",o:["Hip (gluteal) and knee (quadriceps) strengthening","Aggressive patellar mobilisation alone","Complete rest until pain-free","Immediate high-impact plyometrics"],a:0,e:"Evidence supports combined hip (gluteal) and knee (quadriceps) strengthening for patellofemoral pain; isolated rest or early high-impact loading is less effective."}
+],
+neuro:[
+ {d:"Easy",q:"In the FAST stroke screening tool, what does 'F' stand for?",o:["Fatigue","Face (drooping)","Fever","Falls"],a:1,e:"FAST = Face drooping, Arm weakness, Speech difficulty, Time to call for help — a public stroke-recognition tool."},
+ {d:"Easy",q:"A stroke affecting the LEFT cerebral hemisphere typically causes weakness on which side?",o:["The left side","The right side","Both sides equally","Neither side"],a:1,e:"Motor pathways decussate, so a left-hemisphere stroke causes right-sided (contralateral) weakness."},
+ {d:"Easy",q:"Foot drop most commonly results from weakness of the:",o:["Plantarflexors","Dorsiflexors","Hip extensors","Knee flexors"],a:1,e:"Foot drop is weakness of the ankle dorsiflexors (e.g. tibialis anterior), often from common fibular nerve involvement."},
+ {d:"Easy",q:"A lesion of the cerebellum characteristically causes:",o:["Spasticity","Ataxia and incoordination","Resting tremor only","Sensory loss only"],a:1,e:"Cerebellar lesions impair coordination, producing ataxia, dysmetria and balance disturbance."},
+ {d:"Easy",q:"Which is a cardinal motor feature of Parkinson's disease?",o:["Bradykinesia","Hyperreflexia with clonus","Glove-and-stocking numbness","Nystagmus"],a:0,e:"Parkinson's cardinal features are bradykinesia, rigidity, resting tremor and postural instability; bradykinesia is essential to diagnosis."},
+ {d:"Easy",q:"The Glasgow Coma Scale assesses which three responses?",o:["Eye, verbal and motor","Pupil, pulse and pressure","Power, reflex and tone","Gait, grip and gaze"],a:0,e:"The GCS scores Eye opening, Verbal response and Motor response (total 3–15)."},
+ {d:"Easy",q:"Which is a typical sign of an upper motor neuron lesion?",o:["Flaccidity and muscle wasting","Increased tone (spasticity) and hyperreflexia","Fasciculations","Absent reflexes"],a:1,e:"UMN lesions produce spasticity, hyperreflexia and an upgoing plantar response; flaccidity and wasting are LMN features."},
+ {d:"Medium",q:"For freezing of gait in Parkinson's disease, the strategy with the best evidence to aid gait initiation is:",o:["Passive hamstring stretching","External cueing (rhythmic auditory or visual cues)","Isometric quadriceps holds","Wheelchair prescription"],a:1,e:"External cues bypass impaired internal movement generation, improving gait initiation and reducing freezing."},
+ {d:"Medium",q:"When facilitating sit-to-stand with a hemiplegic patient, the best early strategy is to encourage:",o:["Pulling up on the affected arm","Forward trunk lean with weight through both feet","Pushing only through the unaffected side","A very high seat with no foot loading"],a:1,e:"Forward trunk lean ('nose over toes') with symmetrical weight-bearing promotes a normal pattern and affected-side loading."},
+ {d:"Medium",q:"Which outcome measure is widely used to assess balance in neurological patients?",o:["Berg Balance Scale","Ottawa Ankle Rules","Glasgow Coma Scale","Wells Score"],a:0,e:"The Berg Balance Scale is a validated 14-item measure of functional balance widely used in stroke and other neuro populations."},
+ {d:"Medium",q:"A patient with multiple sclerosis fatigues quickly when exercising. A key principle when adapting their programme is to:",o:["Train to exhaustion to build tolerance","Avoid overheating and use paced, interval-style activity","Exercise only in hot environments","Stop all exercise"],a:1,e:"Heat worsens MS symptoms (Uhthoff's phenomenon); pacing, rest intervals and staying cool optimise activity within the fatigue ceiling."},
+ {d:"Medium",q:"Which gait deviation is commonly seen after stroke due to reduced knee/hip flexion in swing?",o:["Circumduction of the leg","Antalgic gait","High-stepping bilaterally","Waddling gait"],a:0,e:"Reduced swing-phase flexion (and foot drop) leads to circumduction — swinging the leg outward to clear the floor."},
+ {d:"Medium",q:"Velocity-dependent increased resistance to passive stretch following an UMN lesion is termed:",o:["Rigidity","Spasticity","Ataxia","Hypotonia"],a:1,e:"Spasticity is a velocity-dependent increase in tonic stretch reflexes, a feature of the upper motor neuron syndrome."},
+ {d:"Hard",q:"A complete spinal cord injury at C6 would be expected to PRESERVE which movement?",o:["Finger flexion (grip)","Wrist extension","Ankle dorsiflexion","Hip flexion"],a:1,e:"C6 preserves wrist extension (extensor carpi radialis), enabling a tenodesis grip; finger flexion (C8) and lower-limb movements are lost."},
+ {d:"Hard",q:"Unilateral spatial neglect is most associated with a lesion of the:",o:["Left frontal lobe","Right parietal lobe","Cerebellum","Brainstem"],a:1,e:"Neglect most commonly follows right parietal lobe damage, producing inattention to the left side of space."},
+ {d:"Hard",q:"Brown-Séquard syndrome (cord hemisection) classically produces:",o:["Bilateral motor loss only","Ipsilateral motor & proprioception loss with contralateral pain/temperature loss","Complete sensory sparing","Loss of all reflexes below the lesion"],a:1,e:"Hemisection gives ipsilateral motor and dorsal-column (proprioception/vibration) loss, with contralateral spinothalamic (pain/temperature) loss below the lesion."},
+ {d:"Hard",q:"Autonomic dysreflexia is a risk in spinal cord injuries at or above which level?",o:["L1","T6","S2","T12"],a:1,e:"Lesions at or above T6 can trigger autonomic dysreflexia — a dangerous reflex hypertension to noxious stimuli below the lesion (e.g. a blocked catheter)."},
+ {d:"Hard",q:"On the ASIA Impairment Scale, grade 'A' indicates:",o:["Normal motor and sensory function","Complete injury — no motor or sensory function in sacral segments S4–S5","Incomplete with most muscles antigravity","Sensory incomplete only"],a:1,e:"ASIA A is a complete injury with no preserved motor or sensory function in the lowest sacral segments (S4–S5)."},
+ {d:"Hard",q:"Contraversive 'pushing' behaviour (pusher syndrome) after stroke is best managed by:",o:["Pushing the patient further toward the strong side","Helping the patient re-learn upright vertical using visual references","Strict bed rest","Avoiding all weight-bearing"],a:1,e:"Treatment uses visual feedback and external references to help the patient relearn a true vertical orientation and stop pushing toward the hemiplegic side."},
+ {d:"Medium",q:"The 10-metre walk test is primarily used to measure:",o:["Cognition","Gait speed (comfortable and fast)","Spasticity","Sensation"],a:1,e:"The 10-metre walk test measures gait speed, a sensitive and widely used marker of mobility and recovery after stroke and in other neurological conditions."}
+],
+anatomy:[
+ {d:"Easy",q:"How many cervical vertebrae are there in the human spine?",o:["5","7","12","9"],a:1,e:"There are 7 cervical vertebrae (C1–C7), followed by 12 thoracic, 5 lumbar, the sacrum and coccyx."},
+ {d:"Easy",q:"The biceps brachii performs which two main actions?",o:["Elbow extension and pronation","Elbow flexion and forearm supination","Shoulder extension and adduction","Wrist flexion and abduction"],a:1,e:"Biceps brachii flexes the elbow and is a powerful supinator of the forearm (strongest with the elbow flexed)."},
+ {d:"Easy",q:"The 'funny bone' sensation at the medial elbow is due to which nerve?",o:["Median nerve","Ulnar nerve","Radial nerve","Axillary nerve"],a:1,e:"The ulnar nerve passes superficially behind the medial epicondyle, where a knock produces the characteristic tingling."},
+ {d:"Easy",q:"Which is the largest tarsal bone of the foot?",o:["Talus","Calcaneus","Navicular","Cuboid"],a:1,e:"The calcaneus (heel bone) is the largest tarsal bone and forms the heel, transmitting body weight to the ground."},
+ {d:"Easy",q:"How many muscles make up the quadriceps femoris?",o:["Two","Three","Four","Five"],a:2,e:"Four: rectus femoris plus vastus lateralis, medialis and intermedius. Only rectus femoris crosses the hip."},
+ {d:"Easy",q:"Which rotator cuff muscle initiates the first ~15° of shoulder abduction?",o:["Supraspinatus","Infraspinatus","Subscapularis","Teres minor"],a:0,e:"Supraspinatus initiates abduction (roughly the first 15°) before the deltoid becomes the prime mover."},
+ {d:"Easy",q:"The anterior cruciate ligament (ACL) primarily resists which tibial movement?",o:["Posterior translation","Anterior translation","Compression","Distraction"],a:1,e:"The ACL chiefly resists anterior translation of the tibia on the femur, hence the anterior draw and Lachman tests."},
+ {d:"Medium",q:"The common fibular (peroneal) nerve is most vulnerable to injury at the:",o:["Neck of the fibula","Medial malleolus","Greater trochanter","Popliteal apex"],a:0,e:"It winds superficially around the fibular neck, where compression causes foot drop (weak dorsiflexion/eversion)."},
+ {d:"Medium",q:"The sciatic nerve is formed from which spinal nerve roots?",o:["L1–L3","L4–S3","T12–L2","S2–S4"],a:1,e:"The sciatic nerve arises from L4–S3 and later divides into the tibial and common fibular nerves."},
+ {d:"Medium",q:"Which muscle is the most effective elbow flexor when the forearm is mid-prone (thumb up)?",o:["Biceps brachii","Brachioradialis","Triceps brachii","Pronator teres"],a:1,e:"Brachioradialis is most effective in mid-pronation; biceps is strongest in supination."},
+ {d:"Medium",q:"The median nerve passes into the hand through which structure?",o:["Cubital tunnel","Carpal tunnel","Guyon's canal","Tarsal tunnel"],a:1,e:"The median nerve travels through the carpal tunnel beneath the flexor retinaculum; compression here causes carpal tunnel syndrome."},
+ {d:"Medium",q:"Which two rotator cuff muscles are the main external (lateral) rotators of the shoulder?",o:["Supraspinatus and subscapularis","Infraspinatus and teres minor","Subscapularis and teres major","Deltoid and pectoralis"],a:1,e:"Infraspinatus and teres minor produce external rotation; subscapularis is the main internal rotator."},
+ {d:"Medium",q:"Which type of synovial joint is the hip?",o:["Hinge joint","Ball-and-socket joint","Pivot joint","Saddle joint"],a:1,e:"The hip is a ball-and-socket (spheroidal) synovial joint, allowing movement in three planes with high stability."},
+ {d:"Hard",q:"In the cubital fossa, which structure lies most medially (mnemonic TAN, lateral→medial)?",o:["Biceps tendon","Brachial artery","Median nerve","Radial nerve"],a:2,e:"From lateral to medial: Tendon (biceps), Artery (brachial), Nerve (median) — so the median nerve is most medial of the three."},
+ {d:"Hard",q:"Injury to the axillary nerve would most likely impair:",o:["Wrist extension","Shoulder abduction (deltoid) and sensation over the 'regimental badge' area","Finger flexion","Forearm pronation"],a:1,e:"The axillary nerve supplies deltoid and teres minor; injury weakens abduction and numbs the lateral shoulder (regimental badge area)."},
+ {d:"Hard",q:"Erb's palsy results from injury to which part of the brachial plexus?",o:["Lower trunk (C8–T1)","Upper trunk (C5–C6)","Medial cord","Posterior cord only"],a:1,e:"Erb's palsy is an upper trunk (C5–C6) injury, producing the classic 'waiter's tip' posture. Lower trunk (C8–T1) injury causes Klumpke's palsy."},
+ {d:"Hard",q:"The deep fibular (peroneal) nerve supplies which of the following?",o:["Plantarflexors and sole sensation","Ankle dorsiflexors and sensation of the first web space","Hip adductors","Gluteal muscles"],a:1,e:"The deep fibular nerve innervates the dorsiflexor compartment (e.g. tibialis anterior) and gives sensation to the first dorsal web space."},
+ {d:"Hard",q:"The trochlea of the femur articulates with which bone?",o:["Tibia","Patella","Fibula","Talus"],a:1,e:"The femoral trochlea (trochlear groove) articulates with the patella, forming the patellofemoral joint."},
+ {d:"Hard",q:"Which muscle is the chief flexor of the hip joint?",o:["Gluteus maximus","Iliopsoas","Biceps femoris","Gluteus medius"],a:1,e:"Iliopsoas (iliacus + psoas major) is the primary hip flexor. Gluteus maximus is the chief extensor."},
+ {d:"Medium",q:"Which nerve provides the motor supply to the diaphragm?",o:["Vagus nerve","Phrenic nerve (C3–C5)","Intercostal nerves only","Accessory nerve"],a:1,e:"The phrenic nerve (C3, 4, 5 — 'C3,4,5 keep the diaphragm alive') is the sole motor nerve to the diaphragm."}
+]
+};
+
+/* ===================== STATE ===================== */
+const SL={cardio:"Cardiorespiratory",msk:"Musculoskeletal",neuro:"Neurological",anatomy:"Anatomy"};
+const PTS={Easy:10,Medium:20,Hard:30};
+const $=s=>document.querySelector(s);
+let authMode="signin";
+let sel={stream:"cardio",diff:"all"}, game=null;
+let profile=loadProfile(), user=loadUser();
+
+function loadProfile(){try{const p=JSON.parse(localStorage.getItem("pr_profile"));if(p&&typeof p.xp==="number")return p;}catch(e){}return{xp:0};}
+function saveProfile(){try{localStorage.setItem("pr_profile",JSON.stringify(profile));}catch(e){}}
+function loadUser(){try{return JSON.parse(localStorage.getItem("pr_user"));}catch(e){return null;}}
+function saveUser(){try{localStorage.setItem("pr_user",JSON.stringify(user));}catch(e){}}
+function lvl(xp){return Math.floor(xp/100)+1;}
+function into(xp){return xp%100;}
+function mult(s){if(s>=6)return 3;if(s>=4)return 2;if(s>=2)return 1.5;return 1;}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function initials(name){return (name||"?").trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();}
+function firstName(name){return (name||"there").trim().split(/\s+/)[0];}
+
+/* ===================== AUTH GATE ===================== */
+document.querySelectorAll("#authTabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#authTabs button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");authMode=b.dataset.mode;
+  $("#nameField").style.display = authMode==="signup"?"block":"none";
+  $("#authBtn").textContent = authMode==="signup"?"Create account":"Sign in";
+  $("#authErr").textContent="";
+});
+$("#authBtn").onclick=()=>{
+  const name=$("#inName").value.trim(), email=$("#inEmail").value.trim(), pass=$("#inPass").value;
+  if(authMode==="signup" && !name){return setErr("Please enter your name.");}
+  if(!email || !/.+@.+\..+/.test(email)){return setErr("Please enter a valid email.");}
+  if(!pass || pass.length<4){return setErr("Password must be at least 4 characters.");}
+  user={name: authMode==="signup"?name:(loadUser()&&loadUser().email===email?loadUser().name:email.split("@")[0]), email};
+  saveUser();
+  enterApp();
+};
+function setErr(m){$("#authErr").textContent=m;}
+$("#logoutBtn").onclick=()=>{
+  try{localStorage.removeItem("pr_user");}catch(e){} user=null;
+  $("#menu").classList.add("hidden");$("#quiz").classList.add("hidden");$("#results").classList.add("hidden");
+  $("#userBox").classList.remove("show");$("#premPill").style.display="";
+  $("#gate").classList.remove("hidden");
+  $("#inEmail").value="";$("#inPass").value="";$("#inName").value="";
+};
+
+function enterApp(){
+  $("#gate").classList.add("hidden");
+  $("#userBox").classList.add("show");
+  $("#premPill").style.display="none";
+  $("#uName").textContent="Hi, "+firstName(user.name);
+  $("#uAvatar").textContent=initials(user.name);
+  renderUserMeta();
+  $("#menu").classList.remove("hidden");
+  hint();
+}
+function renderUserMeta(){ $("#uLevel").textContent="Lv "+lvl(profile.xp)+" · "+profile.xp+" XP"; }
+
+/* ===================== MENU ===================== */
+document.querySelectorAll("#streamSeg button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#streamSeg button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");sel.stream=b.dataset.stream;hint();
+});
+document.querySelectorAll("#diffSeg button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#diffSeg button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");sel.diff=b.dataset.diff;hint();
+});
+function pool(){let p=BANK[sel.stream];if(sel.diff!=="all")p=p.filter(q=>q.d===sel.diff);return p;}
+function hint(){const n=pool().length;$("#menuHint").textContent=n+" "+(sel.diff==="all"?"mixed":sel.diff.toLowerCase())+" questions · "+SL[sel.stream];}
+$("#startBtn").onclick=start;
+
+/* ===================== QUIZ ===================== */
+function start(){
+  const qs=shuffle(pool()).map(q=>({...q,order:shuffle(q.o.map((t,idx)=>({t,idx})))}));
+  game={qs,i:0,score:0,streak:0,best:0,correct:0,answered:0,xpStart:profile.xp,hard:0,prevLevel:lvl(profile.xp)};
+  $("#menu").classList.add("hidden");$("#results").classList.add("hidden");$("#quiz").classList.remove("hidden");
+  hud();question();window.scrollTo({top:0,behavior:"smooth"});
+}
+function hud(){
+  $("#hudScore").textContent=game.score;$("#hudStreak").textContent=game.streak;
+  const m=mult(game.streak),mp=$("#hudMult");if(m>1){mp.style.display="";mp.textContent="×"+m;}else mp.style.display="none";
+  $("#flame").classList.toggle("lit",game.streak>=2);
+  $("#xpLab").textContent="Level "+lvl(profile.xp);$("#xpFill").style.width=into(profile.xp)+"%";
+  $("#progFill").style.width=(game.i/game.qs.length*100)+"%";
+}
+function question(){
+  const q=game.qs[game.i],keys=["A","B","C","D"],host=$("#qHost");host.innerHTML="";
+  const card=document.createElement("div");card.className="qcard";
+  card.innerHTML='<div class="qmeta"><span class="tag stream">'+SL[sel.stream]+'</span><span class="tag d-'+q.d+'">'+q.d+' · '+PTS[q.d]+' pts</span><span class="qnum">Q'+(game.i+1)+' / '+game.qs.length+'</span></div><div class="qtext">'+q.q+'</div><div class="opts"></div><div class="explain"><h4></h4><div class="etext"></div></div><button class="nextBtn" style="display:none">Next →</button>';
+  const opts=card.querySelector(".opts");
+  q.order.forEach((o,n)=>{const el=document.createElement("div");el.className="opt";
+    el.innerHTML='<span class="key">'+keys[n]+'</span><span class="txt">'+o.t+'</span><span class="mark">✓</span>';
+    el.onclick=()=>answer(card,q,o,el);opts.appendChild(el);});
+  host.appendChild(card);
+}
+function answer(card,q,chosen,el){
+  const opts=card.querySelectorAll(".opt");opts.forEach(o=>o.classList.add("disabled"));
+  const ok=chosen.idx===q.a;
+  opts.forEach(o=>{if(o.querySelector(".txt").textContent===q.o[q.a]){o.classList.add("correct");o.querySelector(".mark").textContent="✓";}});
+  game.answered++;
+  if(ok){const m=mult(game.streak),g=Math.round(PTS[q.d]*m);game.score+=g;game.streak++;game.correct++;if(q.d==="Hard")game.hard++;game.best=Math.max(game.best,game.streak);flo(card,"+"+g);profile.xp+=PTS[q.d];}
+  else{el.classList.add("wrong");el.querySelector(".mark").textContent="✗";game.streak=0;profile.xp+=2;}
+  saveProfile();renderUserMeta();
+  const nl=lvl(profile.xp);if(nl>game.prevLevel){toast("Level up — you're now Level "+nl);game.prevLevel=nl;}
+  const ex=card.querySelector(".explain");ex.classList.add("show",ok?"ok":"no");
+  ex.querySelector("h4").textContent=ok?"Correct":"Not quite";ex.querySelector(".etext").textContent=q.e;
+  hud();
+  const nb=card.querySelector(".nextBtn");nb.style.display="";nb.textContent=game.i<game.qs.length-1?"Next →":"See results →";
+  nb.onclick=()=>{if(game.i<game.qs.length-1){game.i++;hud();question();window.scrollTo({top:0,behavior:"smooth"});}else finish();};
+}
+function flo(card,t){const f=document.createElement("div");f.className="float";f.textContent=t;card.appendChild(f);setTimeout(()=>f.remove(),1000);}
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200);}
+
+/* ===================== RESULTS ===================== */
+function finish(){
+  $("#progFill").style.width="100%";$("#quiz").classList.add("hidden");$("#results").classList.remove("hidden");
+  const acc=game.answered?Math.round(game.correct/game.answered*100):0,xg=profile.xp-game.xpStart;
+  $("#rScore").textContent=game.score;$("#rAcc").textContent=acc+"%";$("#rCorrect").textContent=game.correct+"/"+game.answered;
+  $("#rStreak").textContent=game.best;$("#rXp").textContent="+"+xg;
+  const st=acc>=90?3:acc>=70?2:acc>=50?1:0;
+  $("#rStars").innerHTML=[0,1,2].map(i=>'<span class="'+(i<st?'star-on':'star-off')+'">★</span>').join("");
+  const defs=[{ic:"🎯",n:"Sharpshooter",e:acc>=80,d:"≥80% accuracy"},{ic:"💯",n:"Perfectionist",e:acc===100&&game.answered>0,d:"100% accuracy"},{ic:"🔥",n:"On Fire",e:game.best>=6,d:"6+ streak"},{ic:"🧠",n:"Heavyweight",e:game.hard>=3,d:"3+ hard correct"},{ic:"🎓",n:"Scholar",e:game.answered>=20,d:"Full 20-Q quiz"}];
+  $("#rBadges").innerHTML=defs.map(b=>'<div class="badge '+(b.e?'':'lock')+'"><span class="ic">'+(b.e?b.ic:'🔒')+'</span><span>'+b.n+'<br><span style="font-size:11px;color:var(--muted);font-weight:500">'+b.d+'</span></span></div>').join("");
+  renderUserMeta();window.scrollTo({top:0,behavior:"smooth"});
+}
+$("#againBtn").onclick=start;
+$("#menuBtn").onclick=()=>{$("#results").classList.add("hidden");$("#menu").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});};
+
+/* ===================== INIT ===================== */
+if(user && user.email){ enterApp(); } else { $("#userBox").classList.remove("show"); }
+</script>
+</body>
+</html>
