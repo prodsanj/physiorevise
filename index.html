@@ -186,6 +186,11 @@
   .ed-opt input[type=text]{flex:1}
   .ed-formbtns{display:flex;gap:10px;margin-top:16px}
   .ed-formbtns .metalBtn,.ed-formbtns .ghostBtn{width:auto;padding:12px 18px}
+  .qstat{margin-top:12px;font-size:12.5px;color:var(--muted)}
+  .qstat .bar{height:7px;background:#0e0e10;border:1px solid var(--line2);border-radius:999px;overflow:hidden;margin-top:7px;display:flex}
+  .qstat .bar i{height:100%;display:block}
+  .qstat .bar .c{background:var(--good)} .qstat .bar .w{background:var(--bad)}
+  .qrow-stat{flex:none;font-size:12px;color:var(--muted);min-width:48px;text-align:right}
   .hidden{display:none}
 </style>
 </head>
@@ -511,6 +516,11 @@ let BANK=loadBank();
 function escapeHtml(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function escapeAttr(s){return escapeHtml(s).replace(/"/g,"&quot;");}
 function isAdmin(){return user && user.email && ADMIN_EMAILS.indexOf(user.email.toLowerCase())>-1;}
+function loadStats(){try{return JSON.parse(localStorage.getItem("prx_stats"))||{};}catch(e){return {};}}
+function saveStats(){try{localStorage.setItem("prx_stats",JSON.stringify(STATS));}catch(e){}}
+let STATS=loadStats();
+function recordStat(k,correct){STATS[k]=STATS[k]||{c:0,w:0};if(correct)STATS[k].c++;else STATS[k].w++;saveStats();}
+function qStat(k){const s=STATS[k];if(!s)return null;const t=s.c+s.w;if(!t)return null;const pct=Math.round(s.c/t*100);return {pct:pct,wpct:100-pct,total:t};}
 let authMode="signin";
 let sel={stream:"cardio",diff:"all"}, game=null;
 let profile=loadProfile(), user=loadUser();
@@ -595,7 +605,7 @@ function hud(){
 function question(){
   const q=game.qs[game.i],keys=["A","B","C","D"],host=$("#qHost");host.innerHTML="";
   const card=document.createElement("div");card.className="qcard";
-  card.innerHTML='<div class="qmeta"><span class="tag stream">'+SL[sel.stream]+'</span><span class="tag d-'+q.d+'">'+q.d+' · '+PTS[q.d]+' pts</span><span class="qnum">Q'+(game.i+1)+' / '+game.qs.length+'</span></div><div class="qtext">'+q.q+'</div><div class="opts"></div><div class="explain"><h4></h4><div class="etext"></div></div><button class="nextBtn" style="display:none">Next →</button>';
+  card.innerHTML='<div class="qmeta"><span class="tag stream">'+SL[sel.stream]+'</span><span class="tag d-'+q.d+'">'+q.d+' · '+PTS[q.d]+' pts</span><span class="qnum">Q'+(game.i+1)+' / '+game.qs.length+'</span></div><div class="qtext">'+q.q+'</div><div class="opts"></div><div class="explain"><h4></h4><div class="etext"></div><div class="qstat"></div></div><button class="nextBtn" style="display:none">Next →</button>';
   const opts=card.querySelector(".opts");
   q.order.forEach((o,n)=>{const el=document.createElement("div");el.className="opt";
     el.innerHTML='<span class="key">'+keys[n]+'</span><span class="txt">'+o.t+'</span><span class="mark">✓</span>';
@@ -613,6 +623,9 @@ function answer(card,q,chosen,el){
   const nl=lvl(profile.xp);if(nl>game.prevLevel){toast("Level up — you're now Level "+nl);game.prevLevel=nl;}
   const ex=card.querySelector(".explain");ex.classList.add("show",ok?"ok":"no");
   ex.querySelector("h4").textContent=ok?"Correct":"Not quite";ex.querySelector(".etext").textContent=q.e;
+  recordStat(q.q,ok);
+  const stt=qStat(q.q),sc=card.querySelector(".qstat");
+  if(stt&&sc){sc.innerHTML='📊 '+stt.pct+'% answered correctly · '+stt.wpct+'% incorrect<div class="bar"><i class="c" style="width:'+stt.pct+'%"></i><i class="w" style="width:'+stt.wpct+'%"></i></div>';}
   hud();
   const nb=card.querySelector(".nextBtn");nb.style.display="";nb.textContent=game.i<game.qs.length-1?"Next →":"See results →";
   nb.onclick=()=>{if(game.i<game.qs.length-1){game.i++;hud();question();window.scrollTo({top:0,behavior:"smooth"});}else finish();};
@@ -639,7 +652,7 @@ $("#menuBtn").onclick=()=>{$("#results").classList.add("hidden");$("#menu").clas
 let edState={stream:"cardio"};
 function openEditor(){$("#menu").classList.add("hidden");$("#quiz").classList.add("hidden");$("#results").classList.add("hidden");$("#editor").classList.remove("hidden");document.querySelectorAll('#edStreamSeg button').forEach(x=>x.classList.toggle('active',x.dataset.stream===edState.stream));edList();window.scrollTo({top:0,behavior:"smooth"});}
 function edDone(){$("#editor").classList.add("hidden");$("#menu").classList.remove("hidden");hint();window.scrollTo({top:0,behavior:"smooth"});}
-function edList(){const s=edState.stream,arr=BANK[s];let h='<div class="ed-listhead"><span>'+arr.length+' questions · '+SL[s]+'</span><button class="metalBtn" id="edAdd" style="width:auto;padding:9px 14px">+ Add question</button></div><div class="ed-list">';arr.forEach(function(q,i){h+='<div class="qrow"><div class="qrow-main"><span class="qrow-d d-'+q.d+'">'+q.d+'</span><span class="qrow-q">'+escapeHtml(q.q)+'</span></div><div class="qrow-act"><button data-i="'+i+'" class="ed-edit">Edit</button><button data-i="'+i+'" class="ed-del">Delete</button></div></div>';});h+='</div>';$("#edBody").innerHTML=h;$("#edAdd").onclick=function(){edForm(null);};$("#edBody").querySelectorAll(".ed-edit").forEach(function(b){b.onclick=function(){edForm(parseInt(b.dataset.i));};});$("#edBody").querySelectorAll(".ed-del").forEach(function(b){b.onclick=function(){edDelete(parseInt(b.dataset.i));};});}
+function edList(){const s=edState.stream,arr=BANK[s];let h='<div class="ed-listhead"><span>'+arr.length+' questions · '+SL[s]+'</span><button class="metalBtn" id="edAdd" style="width:auto;padding:9px 14px">+ Add question</button></div><div class="ed-list">';arr.forEach(function(q,i){var st=qStat(q.q);var chip=st?(st.pct+'% ✓ <span style="opacity:.6">('+st.total+')</span>'):'<span style="opacity:.5">no data</span>';h+='<div class="qrow"><div class="qrow-main"><span class="qrow-d d-'+q.d+'">'+q.d+'</span><span class="qrow-q">'+escapeHtml(q.q)+'</span></div><span class="qrow-stat">'+chip+'</span><div class="qrow-act"><button data-i="'+i+'" class="ed-edit">Edit</button><button data-i="'+i+'" class="ed-del">Delete</button></div></div>';});h+='</div>';$("#edBody").innerHTML=h;$("#edAdd").onclick=function(){edForm(null);};$("#edBody").querySelectorAll(".ed-edit").forEach(function(b){b.onclick=function(){edForm(parseInt(b.dataset.i));};});$("#edBody").querySelectorAll(".ed-del").forEach(function(b){b.onclick=function(){edDelete(parseInt(b.dataset.i));};});}
 function edForm(index){const s=edState.stream,editing=index!=null,q=editing?BANK[s][index]:{d:"Medium",q:"",o:["","","",""],a:0,e:""},keys=["A","B","C","D"];let h='<div class="ed-form"><div style="font-size:12px;color:var(--muted);margin-bottom:10px">'+(editing?'Editing Q'+(index+1):'New question')+' · '+SL[s]+'</div>';h+='<label class="lbl">Difficulty</label><select id="efD">'+["Easy","Medium","Hard"].map(function(d){return '<option'+(q.d===d?' selected':'')+'>'+d+'</option>';}).join('')+'</select>';h+='<label class="lbl" style="margin-top:12px">Question</label><textarea id="efQ">'+escapeHtml(q.q)+'</textarea>';h+='<label class="lbl" style="margin-top:12px">Options — tick the correct answer</label>';for(let n=0;n<4;n++){h+='<div class="ed-opt"><input type="radio" name="efA" value="'+n+'"'+(q.a===n?' checked':'')+'><span class="ed-key">'+keys[n]+'</span><input type="text" id="efO'+n+'" value="'+escapeAttr(q.o[n]||"")+'"></div>';}h+='<label class="lbl" style="margin-top:12px">Explanation</label><textarea id="efE">'+escapeHtml(q.e)+'</textarea>';h+='<div class="ed-formbtns"><button class="metalBtn" id="efSave">Save question</button><button class="ghostBtn" id="efCancel">Cancel</button></div><div class="err" id="efErr"></div></div>';$("#edBody").innerHTML=h;$("#efCancel").onclick=edList;$("#efSave").onclick=function(){const o=[0,1,2,3].map(function(n){return document.getElementById("efO"+n).value.trim();});const a=document.querySelector('input[name=efA]:checked');const qt=$("#efQ").value.trim(),et=$("#efE").value.trim(),d=$("#efD").value;if(!qt){$("#efErr").textContent="Enter the question text.";return;}if(o.some(function(x){return !x;})){$("#efErr").textContent="Fill in all four options.";return;}if(!a){$("#efErr").textContent="Select the correct answer.";return;}const obj={d:d,q:qt,o:o,a:parseInt(a.value),e:et};if(editing)BANK[s][index]=obj;else BANK[s].push(obj);saveBank();edList();};}
 function edDelete(i){if(!confirm("Delete this question?"))return;BANK[edState.stream].splice(i,1);saveBank();edList();}
 function edExport(){const lit="/*BANK_START*/\nconst BASE_BANK = "+JSON.stringify(BANK,null,1)+";\n/*BANK_END*/";const out=SELF_HTML.replace(/\/\*BANK_START\*\/[\s\S]*?\/\*BANK_END\*\//,function(){return lit;});const blob=new Blob([out],{type:"text/html"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="index.html";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},3000);toast("Downloaded index.html — re-upload it to GitHub to publish.");}
