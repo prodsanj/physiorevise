@@ -236,6 +236,7 @@
   .acct-row .acct-v{font-size:15px;font-weight:600;margin-top:3px}
   /* OSCE simulator */
   .osce-intro{font-size:13.5px;color:#cdd1d8;margin:6px 0 16px;line-height:1.5}
+  .osce-tip{margin-top:10px;padding:10px 12px;border:1px solid var(--line2);border-radius:10px;background:#0e0e10;font-size:12.5px;color:#bfc3cb;line-height:1.5}
   .osce-settings{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
   .osce-settings .field{flex:1;min-width:160px}
   .osce-cats{flex-wrap:wrap;height:auto;gap:6px;border:none;padding:0;margin-bottom:14px}
@@ -478,7 +479,7 @@
       <div class="ed-top"><h2 style="margin:0;color:var(--muted)">OSCE station simulator</h2><div class="ed-actions"><button class="ghostBtn ed-btn" id="osceDone">Done</button></div></div>
       <div id="osceBody"></div>
     </div>
-    <p class="disclaimer">Practise under exam timing. These 17 cardiorespiratory stations are the supplied case stems; case-specific model answers and marking sheets are added by a physiotherapist in the live product. Self-assessment is a study aid, not exam or clinical advice.</p>
+    <p class="disclaimer">These 17 cardiorespiratory stations are the supplied case stems; case-specific model answers and marking sheets are added by a physiotherapist in the live product. There is no built-in timer — timing yourself (around 1–2 min reading, then 5–8 min performance) helps replicate exam conditions. Self-assessment is a study aid, not exam or clinical advice.</p>
   </section>
 
   <!-- ===== MY ACCOUNT ===== -->
@@ -930,12 +931,12 @@ $("#edDone").onclick=edDone;$("#edExport").onclick=edExport;$("#edReset").onclic
 /* ===================== OSCE STATION SIMULATOR (premium) ===================== */
 /*OSCE_START*/
 const OSCE_CASES = [
- {id:"michael-a",name:"Michael Saylor A",cat:"Cardiac surgery",dx:"Day 4 post CABG x3 + MVR (sternotomy)",age:60,sex:"M",
-  intro:"Michael is a 60-year-old male, Day 4 post CABGs x 3 and MVR via a sternotomy, sitting up in bed in the Coronary Care Unit (CCU). He reports increased fatigue and pain on deep breathing and cough. He has an IDC and IV line and is reluctant to move.",
+ {id:"michael-a",name:"David Carter A",cat:"Cardiac surgery",dx:"Day 4 post CABG x3 + MVR (sternotomy)",age:60,sex:"M",
+  intro:"David is a 60-year-old man, Day 4 post CABGs x 3 and MVR via a sternotomy, sitting up in bed in the Coronary Care Unit (CCU). He reports increased fatigue and pain on deep breathing and cough. He has an IDC and IV line and is reluctant to move.",
   sections:[
    {h:"Past medical history",t:"OA right knee, Type II DM, HT, hypercholesterolaemia, anxiety and depression."},
    {h:"Medication",t:"Metformin, Captopril, Atenolol, Lipitor. Currently receiving oral tramadol."},
-   {h:"Social history",t:"Lives at home with partner in a third-floor apartment. Partner can drive and assist. Retired crypto trader. Minds grandchildren (15 months and 3 years) on Tuesdays; ten-pin bowling Thursdays. Planning a dream holiday to America in 3 months."},
+   {h:"Social history",t:"Lives at home with partner in a third-floor apartment. Partner can drive and assist. Retired accountant. Minds grandchildren (15 months and 3 years) on Tuesdays; lawn bowls on Thursdays. Planning an overseas holiday in 3 months."},
    {h:"Pre-morbid mobility",t:"Independent with all ADLs; recent walking group twice a week; walks >3km with nil aids."},
    {h:"Assessment",t:"Increased pain today — VAS 4/10 rest, 7/10 with movement/cough (yesterday 1/10 rest, 3/10 on movement). Productive cough with creamy yellow sputum, coughing more than usual. Been to toilet this morning, now unwilling to move due to pain. Tired; tried 15 deep breaths + cough this morning but too tired and irritated."},
    {h:"Vital signs",t:"BP 110/65 (80); HR 85 SR; Temp 38°C."},
@@ -946,12 +947,12 @@ const OSCE_CASES = [
    {h:"Auscultation",t:"Decreased breath sounds to lower zones (L worse than R); occasional coarse crackles left mid zones."},
    {h:"Mobility",t:"Walking with 4WF, requires assistance with attachments to toilet and back, ~15m // limited by fatigue and pain."}
   ]},
- {id:"michael-b",name:"Michael Saylor B",cat:"Cardiac surgery",dx:"Day 6 post CABG x3 + MVR; PPC on day 4",age:60,sex:"M",
-  intro:"Michael is a 60-year-old man, Day 6 post CABGs x 3 and MVR via a sternotomy. He developed a postoperative pulmonary complication on day 4; symptoms are gradually improving. He is sitting up in bed talking to his daughter, very emotional and teary, missing home and his grandchildren. He has an IDC and IV line.",
+ {id:"michael-b",name:"David Carter B",cat:"Cardiac surgery",dx:"Day 6 post CABG x3 + MVR; PPC on day 4",age:60,sex:"M",
+  intro:"David is a 60-year-old man, Day 6 post CABGs x 3 and MVR via a sternotomy. He developed a postoperative pulmonary complication on day 4; symptoms are gradually improving. He is sitting up in bed talking to his daughter, very emotional and teary, missing home and his grandchildren. He has an IDC and IV line.",
   sections:[
    {h:"Past medical history",t:"OA, Type II DM, HT, hypercholesterolaemia, anxiety and depression."},
    {h:"Medication",t:"Metformin, Captopril, Atenolol, Lipitor, Paracetamol, oxycodone (oral)."},
-   {h:"Social history",t:"Lives in a second-floor apartment with fit and well partner. Retired crypto trader. Minds grandchildren Tuesdays; ten-pin bowling Thursdays; America trip in 3 months."},
+   {h:"Social history",t:"Lives in a second-floor apartment with fit and well partner. Retired accountant. Minds grandchildren Tuesdays; lawn bowls Thursdays; overseas holiday in 3 months."},
    {h:"Pre-morbid mobility",t:"Independent with all ADLs; walking group twice a week; walks >3km nil aids."},
    {h:"Assessment",t:"Pain 0/10 rest, 3/10 with movement, 6/10 with coughing. SOB when walking. Difficulty bringing up phlegm — feels stuck. Walks to toilet and back independently w/ 4WF but needs encouragement to get out of bed. Taught ACBT 3/7 ago, did it briefly, no longer doing it."},
    {h:"Vital signs",t:"BP 120/70 (87); HR 80 SR; Temp 37.7°C."},
@@ -962,12 +963,12 @@ const OSCE_CASES = [
    {h:"Cough",t:"Weak (limited by pain), moist, non-productive, ineffective."},
    {h:"Mobility",t:"Walking independently with 4WF and 3L O2 via NP ~50m // limited by fatigue; SpO2 98% on 3L O2."}
   ]},
- {id:"michael-c",name:"Michael Saylor C",cat:"Cardiac surgery",dx:"Day 10 post CABG x4; discharge planning",age:60,sex:"M",
-  intro:"Michael is a 60-year-old man, Day 10 post CABGs x 4 via a sternotomy. Recovery was complicated by a PPC on Day 4; symptoms are gradually improving. He is sitting up in bed talking to his daughter — teary. Identified for discharge, with cardiac rehab in his local town in one week. Still requiring supplemental O2.",
+ {id:"michael-c",name:"David Carter C",cat:"Cardiac surgery",dx:"Day 10 post CABG x4; discharge planning",age:60,sex:"M",
+  intro:"David is a 60-year-old man, Day 10 post CABGs x 4 via a sternotomy. Recovery was complicated by a PPC on Day 4; symptoms are gradually improving. He is sitting up in bed talking to his daughter — teary. Identified for discharge, with cardiac rehab in his local town in one week. Still requiring supplemental O2.",
   sections:[
    {h:"Past medical history",t:"OA, Type II DM, HT, hypercholesterolaemia, anxiety and depression."},
    {h:"Medication",t:"Metformin, Captopril, Atenolol, Lipitor, Paracetamol."},
-   {h:"Social history",t:"Lives in a second-floor apartment with fit and well partner. Retired crypto trader. Grandchildren Tuesdays; bowling Thursdays; America trip in 3 months."},
+   {h:"Social history",t:"Lives in a second-floor apartment with fit and well partner. Retired accountant. Grandchildren Tuesdays; lawn bowls Thursdays; overseas holiday in 3 months."},
    {h:"Pre-morbid mobility",t:"Independent with all ADLs; walking group twice a week; walks >3km nil aids."},
    {h:"Assessment",t:"Pain 0/10 rest, 3/10 with UL movement and coughing. Back and neck feel stiff. Small amount of sputum, able to expectorate. Walking on ward up to 50m but needs encouragement to mobilise."},
    {h:"Vital signs",t:"BP 120/70 (87); HR 80 SR; Temp 37°C."},
@@ -978,12 +979,12 @@ const OSCE_CASES = [
    {h:"Cough",t:"Effective, moist, minimal cream-coloured sputum."},
    {h:"Mobility",t:"Transfers independently lie-sit-stand. Walks independently nil aid ~50m with 1L O2 via NP // limited by fatigue; SpO2 96% on 1L O2."}
   ]},
- {id:"mikel-arteta",name:"Mikel Arteta",cat:"Pneumonia",dx:"Day 8 community-acquired RLL pneumonia",age:50,sex:"M",
-  intro:"Mikel is a 50-year-old man admitted 8 days ago with community-acquired lobar pneumonia affecting the right lower lobe. He presented with haemoptysis, malaise, fever, night sweats, SOB and right pleuritic chest pain. Now improving. A large pleural effusion required draining and has resolved.",
+ {id:"mikel-arteta",name:"James Wilson",cat:"Pneumonia",dx:"Day 8 community-acquired RLL pneumonia",age:50,sex:"M",
+  intro:"James is a 50-year-old man admitted 8 days ago with community-acquired lobar pneumonia affecting the right lower lobe. He presented with haemoptysis, malaise, fever, night sweats, SOB and right pleuritic chest pain. Now improving. A large pleural effusion required draining and has resolved.",
   sections:[
    {h:"Past medical history",t:"Osteopenia; L) #NOF 6/12 ago after a fall (recovered, nil other falls); TIA x2 (2019, 2020). Never smoked."},
    {h:"Medication",t:"Current: oral Amoxicillin TDS, Clarithromycin 250mg BD, oxycodone PRN. Usual: Fosamax weekly."},
-   {h:"Social history",t:"Married, lives with wife on a farm in a small community. Football coach. Good supports; family in nearby town (30 min). Plays social tennis and golf."},
+   {h:"Social history",t:"Married, lives with wife on a farm in a small community. Community sports coach. Good supports; family in nearby town (30 min). Plays social tennis and golf."},
    {h:"Pre-morbid mobility",t:"Unlimited; walks around the farm nil aid."},
    {h:"Assessment",t:"Right-sided pain (3/10 rest, 5/10 with movement). Fatigues easily but eager to be discharged ASAP."},
    {h:"Vital signs",t:"BP 104/55 (71); HR 90 SR; Temp 37.1°C. Pathology: WCC 21; CRP 190 mg/L."},
@@ -994,13 +995,13 @@ const OSCE_CASES = [
    {h:"Chest X-ray",t:"Silhouette sign, blurring of right hemidiaphragm, uniform opacity over affected lobe. Small right effusion re-accumulated after drain removed."},
    {h:"Mobility",t:"Walks with 4WF and portable O2 (4L/min NP) ~30m // limited by fatigue and SOBOE (BORG 4/10)."}
   ]},
- {id:"erica-pat",name:"Erica Pat",cat:"Pneumonia",dx:"Day 2 community-acquired RLL pneumonia + effusion",age:60,sex:"F",
-  intro:"Erica is a 60-year-old woman admitted 2 days ago with community-acquired lobar pneumonia affecting the right lower lobe. She presented with haemoptysis, malaise, fever, night sweats, SOB and right pleuritic chest pain. She also has a large pleural effusion requiring draining.",
+ {id:"erica-pat",name:"Susan Taylor",cat:"Pneumonia",dx:"Day 2 community-acquired RLL pneumonia + effusion",age:60,sex:"F",
+  intro:"Susan is a 60-year-old woman admitted 2 days ago with community-acquired lobar pneumonia affecting the right lower lobe. She presented with haemoptysis, malaise, fever, night sweats, SOB and right pleuritic chest pain. She also has a large pleural effusion requiring draining.",
   sections:[
    {h:"Past medical history",t:"Osteoporosis; L) #NOF 6/12 ago (recovered, nil other falls). Non-smoker."},
    {h:"Medication",t:"Current: IV antibiotics, oxycodone PRN. Usual: Fosamax weekly."},
-   {h:"Social history",t:"Married, lives with husband. Good supports; adult children nearby (~20 min). Chef specialising in mushroom dishes. Occasional wine."},
-   {h:"Pre-morbid mobility",t:"Unlimited, nil aid."},
+   {h:"Social history",t:"Married, lives with husband. Good supports; adult children nearby (~20 min). Works as a chef."},
+   {h:"Pre-morbid mobility",t:"Unlimited; walks locally nil aid."},
    {h:"Assessment",t:"Right-sided pain (3/10 rest, 6/10 with movement). Fatigues easily but eager to be discharged ASAP."},
    {h:"Vital signs",t:"BP 100/55 (70); HR 95 SR; Temp 38.1°C. Pathology: WCC 21; CRP 190 mg/L."},
    {h:"ABGs",t:"Admission: pH 7.46; PaO2 55; PaCO2 33; HCO3 23; SaO2 84% RA. Day 2: pH 7.41; PaO2 80; PaCO2 34; HCO3 23; SaO2 94% on FiO2 40%."},
@@ -1011,12 +1012,12 @@ const OSCE_CASES = [
    {h:"Chest X-ray",t:"Silhouette sign, blurring of right hemidiaphragm, uniform opacity over affected lobe. R) pleural effusion."},
    {h:"Mobility",t:"Walks with 4WF and portable O2 (4L/min NP) ~5m // limited by fatigue and SOBOE (BORG 6/10); SpO2 88%."}
   ]},
- {id:"micah-richardson",name:"Micah Richardson",cat:"Bronchiectasis",dx:"Day 1 bronchiectasis exacerbation",age:40,sex:"M",
-  intro:"Micah is a 40-year-old man admitted 1 day ago with an exacerbation of bronchiectasis — his first such admission. Bronchiectasis affects R) ML, R) LL, L) LL.",
+ {id:"micah-richardson",name:"Daniel Brooks",cat:"Bronchiectasis",dx:"Day 1 bronchiectasis exacerbation",age:40,sex:"M",
+  intro:"Daniel is a 40-year-old man admitted 1 day ago with an exacerbation of bronchiectasis — his first such admission. Bronchiectasis affects R) ML, R) LL, L) LL.",
   sections:[
    {h:"Past medical history",t:"Bronchiectasis diagnosed 2 years ago. Whooping cough 10 years ago, measles 20 years ago. Right knee scope 2 years ago."},
    {h:"Medication",t:"Salbutamol MDI PRN (twice daily), Seretide BD, Paracetamol PRN. Owns a nebuliser at home but never uses it. Currently on IV antibiotics."},
-   {h:"Social history",t:"Lives alone, enjoys the bachelor life. Football commentator."},
+   {h:"Social history",t:"Lives alone. Works as a sports commentator."},
    {h:"Pre-morbid mobility & exercise",t:"Walks twice a day for 20–30 min. SOB up hills / brisk walking. Inner-city apartment, 3 storeys."},
    {h:"Assessment",t:"Fatigued; intermittent rib pain on coughing (VAS 0/10 rest, 3/10 coughing, 1/10 bed movements); reluctant to do strenuous activity. Difficulty coughing up sputum — some days ~¼ cup thick greenish sputum."},
    {h:"Vital signs",t:"BP 110/70 (83); HR 82 SR; Temp 37.1°C. Position: thoracic kyphosis, slight barrel chest."},
@@ -1026,12 +1027,12 @@ const OSCE_CASES = [
    {h:"Cough",t:"Strong, moist, productive // small amount of thick greenish sputum."},
    {h:"Mobility",t:"Yet to assess — patient reluctant to get out of bed."}
   ]},
- {id:"thierry-henri",name:"Thierry Henri",cat:"Bronchiectasis",dx:"Day 1 bronchiectasis exacerbation",age:40,sex:"M",
-  intro:"Thierry is a 40-year-old man admitted 1 day ago with an exacerbation of bronchiectasis — his first such admission. Bronchiectasis affects R) ML, R) LL, L) LL.",
+ {id:"thierry-henri",name:"Peter Walsh",cat:"Bronchiectasis",dx:"Day 1 bronchiectasis exacerbation",age:40,sex:"M",
+  intro:"Peter is a 40-year-old man admitted 1 day ago with an exacerbation of bronchiectasis — his first such admission. Bronchiectasis affects R) ML, R) LL, L) LL.",
   sections:[
    {h:"Past medical history",t:"Bronchiectasis diagnosed 2 years ago. Whooping cough 10 years ago, measles 20 years ago. Right knee scope 2 years ago."},
    {h:"Medication",t:"Salbutamol MDI PRN (twice daily), Seretide BD, Paracetamol PRN. Owns a nebuliser but never uses it. Currently on IV antibiotics."},
-   {h:"Social history",t:"Lives with wife and kids. Retired football player."},
+   {h:"Social history",t:"Lives with wife and children. Retired athlete."},
    {h:"Pre-morbid mobility & exercise",t:"Walks twice a day for 20–30 min. SOB up hills / brisk walking. Inner-city apartment, 3 storeys."},
    {h:"Assessment",t:"Fatigue; intermittent rib pain on coughing (VAS 1/10 rest, 4/10 coughing, 2/10 bed movements); reluctant to participate. Difficulty coughing up very thick sputum; doesn't believe his breathing exercises help. Some days ~¼ cup thick greenish sputum."},
    {h:"Vital signs",t:"BP 115/75 (88); HR 77 SR; Temp 36.9°C. Position: thoracic kyphosis, slight barrel chest."},
@@ -1041,13 +1042,13 @@ const OSCE_CASES = [
    {h:"Cough",t:"Moderate effectiveness, moist, productive // moderate thick greenish sputum; coughing tends to irritate."},
    {h:"Mobility",t:"Walks independently nil aids ~20m // limited by fatigue."}
   ]},
- {id:"jamie-carra",name:"Jamie Carra",cat:"Bronchiectasis",dx:"Day 7 bronchiectasis exacerbation; discharge tomorrow",age:45,sex:"M",
-  intro:"Jamie is a 45-year-old man admitted 7 days ago with an exacerbation of bronchiectasis — his first such admission. Bronchiectasis affects R) ML, R) LL, L) LL. Keen to prevent another admission; will be discharged tomorrow.",
+ {id:"jamie-carra",name:"Andrew Scott",cat:"Bronchiectasis",dx:"Day 7 bronchiectasis exacerbation; discharge tomorrow",age:45,sex:"M",
+  intro:"Andrew is a 45-year-old man admitted 7 days ago with an exacerbation of bronchiectasis — his first such admission. Bronchiectasis affects R) ML, R) LL, L) LL. Keen to prevent another admission; will be discharged tomorrow.",
   sections:[
    {h:"Past medical history",t:"Bronchiectasis diagnosed 2 years ago. Whooping cough 10 years ago, measles 20 years ago. Right knee scope 2 years ago."},
    {h:"Medication",t:"Salbutamol MDI PRN (twice daily), Seretide BD, Paracetamol PRN. Owns a nebuliser but never used it. Changed to oral antibiotics yesterday."},
    {h:"Social history",t:"Lives at home with family. Inner-city apartment, 3 storeys."},
-   {h:"Pre-morbid mobility & exercise",t:"Walks twice a day for 20–30 min. SOB up hills / brisk walking. Enjoys socialising and beer."},
+   {h:"Pre-morbid mobility & exercise",t:"Walks twice a day for 20–30 min. SOB up hills / brisk walking. Enjoys socialising with friends."},
    {h:"Assessment",t:"Minimal pain (VAS 0/10 rest, 2/10 coughing/movement). Very keen to go home; wants to learn ways to improve his health. Producing ~½ cup thick greenish sputum."},
    {h:"Vital signs",t:"BP 115/75 (88); HR 79 SR; Temp 36.9°C. Position: thoracic kyphosis, slight barrel chest."},
    {h:"Respiratory",t:"SpO2 95% RA, RR 18."},
@@ -1056,12 +1057,12 @@ const OSCE_CASES = [
    {h:"Cough",t:"Strong, moist, productive // ~tablespoon thick greenish sputum."},
    {h:"Mobility / strength",t:"Walks independently nil aids ~100m // limited by fatigue. Strength: UL globally 4/5, LL globally 4/5."}
   ]},
- {id:"aubrey-a",name:"Aubrey A",cat:"Abdominal surgery",dx:"Day 1 post emergency laparotomy",age:66,sex:"F",
-  intro:"Aubrey is a 66-year-old woman, Day 1 post emergency exploratory laparotomy for abdominal pain. Post-op orders routine. The medical team are keen for her to mobilise.",
+ {id:"aubrey-a",name:"Margaret Reed A",cat:"Abdominal surgery",dx:"Day 1 post emergency laparotomy",age:66,sex:"F",
+  intro:"Margaret is a 66-year-old woman, Day 1 post emergency exploratory laparotomy for abdominal pain. Post-op orders routine. The medical team are keen for her to mobilise.",
   sections:[
    {h:"Past medical history",t:"Nil. First hospital admission."},
    {h:"Medication",t:"Nil prior to admission."},
-   {h:"Social history",t:"Musician. Lives at home, main carer for husband. Ex-smoker (ceased 15 years ago). Enjoys gardening and cooking."},
+   {h:"Social history",t:"Music teacher. Lives at home, main carer for husband. Ex-smoker (ceased 15 years ago). Enjoys gardening and cooking."},
    {h:"Pre-morbid mobility",t:"Independent with all ADLs. Walks 30 min daily; gym strength training x3/week. House with large garden, SSH, nil step access."},
    {h:"Assessment",t:"Feeling dizzy today, especially when sitting up. Very tired, nauseated, vomited this morning. Tolerable pain 1/10 rest, 3/10 with movement; using PCA. No sputum, no SOB."},
    {h:"Vital signs",t:"BP 101/58 (72); HR 70 SR; Temp 36.5°C."},
@@ -1073,12 +1074,12 @@ const OSCE_CASES = [
    {h:"Chest X-ray",t:"Small left lower lobe atelectasis."},
    {h:"Mobility",t:"Yet to get out of bed today."}
   ]},
- {id:"aubrey-b",name:"Aubrey B",cat:"Abdominal surgery",dx:"Day 3 post emergency laparotomy",age:66,sex:"F",
-  intro:"Aubrey is a 66-year-old woman, Day 3 post emergency exploratory laparotomy. Days 1–2 complicated by nausea, vomiting and hypotension. The medical team are keen for physio to progress her mobility.",
+ {id:"aubrey-b",name:"Margaret Reed B",cat:"Abdominal surgery",dx:"Day 3 post emergency laparotomy",age:66,sex:"F",
+  intro:"Margaret is a 66-year-old woman, Day 3 post emergency exploratory laparotomy. Days 1–2 complicated by nausea, vomiting and hypotension. The medical team are keen for physio to progress her mobility.",
   sections:[
    {h:"Past medical history",t:"Nil. First hospital admission."},
    {h:"Medication",t:"Nil prior to admission."},
-   {h:"Social history",t:"Musician. Lives at home, main carer for husband. Ex-smoker (ceased 15 years ago). Enjoys gardening and cooking."},
+   {h:"Social history",t:"Music teacher. Lives at home, main carer for husband. Ex-smoker (ceased 15 years ago). Enjoys gardening and cooking."},
    {h:"Pre-morbid mobility",t:"Independent with all ADLs. Walks 30 min daily; gym x3/week. House with large garden, SSH, nil step access."},
    {h:"Assessment",t:"Feeling better today. Vasovagal yesterday morning when SOEOB with physio. Tolerated sitting out of bed 1 hour last evening, keen to repeat. Pain 1/10 rest, 2/10 with movement. Very small amount of whitish sputum; nil SOB."},
    {h:"Vital signs",t:"BP 97/60 (72); HR 70 SR; Temp 36.5°C. Altered METs: team happy for systolic BP >95."},
@@ -1089,8 +1090,8 @@ const OSCE_CASES = [
    {h:"Chest X-ray",t:"Left lower lobe collapse."},
    {h:"Mobility",t:"Has walked to the toilet, 1x min assist w/ 4WF."}
   ]},
- {id:"sam-bankman-a",name:"Sam Bankman A",cat:"Thoracic surgery",dx:"Day 2 post L upper lobectomy (thoracotomy); ICC in situ",age:79,sex:"M",
-  intro:"Sam is a 79-year-old patient, Day 2 post left upper lobectomy via thoracotomy for carcinoma of the lung. An intercostal catheter remains in situ on 20cmH2O suction (can be removed for mobilisation). He has an IDC in situ.",
+ {id:"sam-bankman-a",name:"Frank Howard A",cat:"Thoracic surgery",dx:"Day 2 post L upper lobectomy (thoracotomy); ICC in situ",age:79,sex:"M",
+  intro:"Frank is a 79-year-old patient, Day 2 post left upper lobectomy via thoracotomy for carcinoma of the lung. An intercostal catheter remains in situ on 20cmH2O suction (can be removed for mobilisation). He has an IDC in situ.",
   sections:[
    {h:"Past medical history",t:"Carcinoma of the lung diagnosed 2/52 ago. Smoker 50 years, 20/day. Hypertension, type 2 diabetes."},
    {h:"Medication",t:"Salbutamol MDI QID, Seretide BD, Metoprolol, Metformin."},
@@ -1104,8 +1105,8 @@ const OSCE_CASES = [
    {h:"Cough",t:"Weak, slightly moist, non-productive."},
    {h:"Mobility",t:"Yet to get out of bed due to sensation issues post-epidural."}
   ]},
- {id:"sam-bankman-b",name:"Sam Bankman B",cat:"Thoracic surgery",dx:"Day 3 post L upper lobectomy (thoracotomy); ICC removed",age:71,sex:"M",
-  intro:"Sam is a 71-year-old patient, Day 3 post left upper lobectomy via thoracotomy for carcinoma of the lung. The intercostal catheter was removed this morning.",
+ {id:"sam-bankman-b",name:"Frank Howard B",cat:"Thoracic surgery",dx:"Day 3 post L upper lobectomy (thoracotomy); ICC removed",age:71,sex:"M",
+  intro:"Frank is a 71-year-old patient, Day 3 post left upper lobectomy via thoracotomy for carcinoma of the lung. The intercostal catheter was removed this morning.",
   sections:[
    {h:"Past medical history",t:"Asthma. Smoker 40 years, 20/day. Carcinoma of the lung diagnosed 3/52 ago. Hypertension, type 2 diabetes."},
    {h:"Medication",t:"Salbutamol MDI QID, Seretide BD, Metoprolol, Metformin."},
@@ -1120,8 +1121,8 @@ const OSCE_CASES = [
    {h:"Cough",t:"Weak, moist, non-productive."},
    {h:"Mobility",t:"Walking w/ 4WF ~50m."}
   ]},
- {id:"jermaine",name:"Jermaine",cat:"COPD",dx:"Day 1 infective exacerbation of COPD",age:72,sex:"M",
-  intro:"Jermaine is 72, admitted 1 day ago with an infective exacerbation of COPD over the weekend. Initially managed in ED with BiPAP, since transferred to the ward; BiPAP no longer required. Breathless, can speak in short phrases but SOB with longer speech. First hospital admission.",
+ {id:"jermaine",name:"Raymond Clarke",cat:"COPD",dx:"Day 1 infective exacerbation of COPD",age:72,sex:"M",
+  intro:"Raymond is 72, admitted 1 day ago with an infective exacerbation of COPD over the weekend. Initially managed in ED with BiPAP, since transferred to the ward; BiPAP no longer required. Breathless, can speak in short phrases but SOB with longer speech. First hospital admission.",
   sections:[
    {h:"Past medical history",t:"Right MCA CVA 5 years ago. COPD 10 years ago. Current smoker since 18, 1 pack/day. Hypertension, hypothyroidism, type 2 diabetes, PVD."},
    {h:"Medication",t:"Thyroxine, Lipitor, Warfarin, Salbutamol MDI PRN (last taken 2 hours ago), Spiriva BD, IV antibiotics."},
@@ -1134,12 +1135,12 @@ const OSCE_CASES = [
    {h:"Cough",t:"Weak, dry, non-productive."},
    {h:"Mobility",t:"Walks independently nil aid ~15m with oxygen // limited by SOB (BORG 7/10)."}
   ]},
- {id:"jock-harlow",name:"Jock Harlow",cat:"Trauma / chest",dx:"Day 1 L rib #8–10 + pneumothorax; UWSD on suction",age:30,sex:"M",
-  intro:"Jock is a 30-year-old who fell yesterday while clearing gutters. He fractured left ribs 8, 9 and 10 posterolaterally and has a left pneumothorax with an intercostal catheter on an underwater seal drain — the UWSD cannot be removed from suction. He also has an IDC and IV line.",
+ {id:"jock-harlow",name:"Thomas Hayes",cat:"Trauma / chest",dx:"Day 1 L rib #8–10 + pneumothorax; UWSD on suction",age:30,sex:"M",
+  intro:"Thomas is a 30-year-old who fell yesterday while clearing gutters. He fractured left ribs 8, 9 and 10 posterolaterally and has a left pneumothorax with an intercostal catheter on an underwater seal drain — the UWSD cannot be removed from suction. He also has an IDC and IV line.",
   sections:[
-   {h:"Past medical history",t:"COVID-19 (July 2021). Non-smoker, social drinker."},
+   {h:"Past medical history",t:"COVID-19 (July 2021). Non-smoker."},
    {h:"Medication",t:"Morphine PCA, 1mg per demand, 5 demands in last hour, 5-min lockout."},
-   {h:"Social history",t:"Single. Musician, planning a music tour to start in two months."},
+   {h:"Social history",t:"Single. Self-employed, planning a work trip away in two months."},
    {h:"Pre-morbid mobility",t:"Independent walking nil aid. Gym four times/week."},
    {h:"Assessment",t:"Wound site clean, nil issues. Not bringing up any sputum, not out of bed yet. Pain VAS 2/10 rest, 5/10 with movement."},
    {h:"Vital signs",t:"BP 115/65 (82); HR 67; afebrile. Position: slouched to the left, doing the crossword."},
@@ -1149,13 +1150,13 @@ const OSCE_CASES = [
    {h:"Cough",t:"Weak, dry, non-productive (limited by pain)."},
    {h:"Mobility",t:"Yet to get out of bed."}
   ]},
- {id:"shaun-combs",name:"Shaun Combs",cat:"Trauma / chest",dx:"Day 3 L rib #8–10 + pneumothorax; UWSD off suction",age:50,sex:"M",
-  intro:"Shaun is a 50-year-old who fell from a ladder three days ago and fractured his 8th, 9th and 10th ribs on the left posterolaterally, sustaining a pneumothorax. An intercostal catheter on an underwater seal drain is in situ (minimal bubbling on forced expiration); the UWSD can now be removed from suction for mobility.",
+ {id:"shaun-combs",name:"Mark Davies",cat:"Trauma / chest",dx:"Day 3 L rib #8–10 + pneumothorax; UWSD off suction",age:50,sex:"M",
+  intro:"Mark is a 50-year-old who fell from a ladder three days ago and fractured his 8th, 9th and 10th ribs on the left posterolaterally, sustaining a pneumothorax. An intercostal catheter on an underwater seal drain is in situ (minimal bubbling on forced expiration); the UWSD can now be removed from suction for mobility.",
   sections:[
    {h:"Past medical history",t:"No significant history. Non-smoker."},
    {h:"Medication",t:"Morphine PCA, 1mg per demand, 2 demands in last hour, 5-min lockout."},
-   {h:"Social history",t:"Single, supportive family. FIFO worker in an oil refinery."},
-   {h:"Pre-morbid mobility",t:"Independent nil aid. Gym x3/week, plays social padel. Split-level house, bedroom upstairs (10 steps → landing → 10 steps)."},
+   {h:"Social history",t:"Single, supportive family. Works away from home on a roster."},
+   {h:"Pre-morbid mobility",t:"Independent nil aid. Gym x3/week, plays social tennis. Split-level house, bedroom upstairs (10 steps → landing → 10 steps)."},
    {h:"Assessment",t:"Keen to go home and back to work. Pain 3/10 coughing/movement, 1/10 rest. Bringing up small amount of yellowish sputum. Wound clean. Sat out of bed 2 hours yesterday."},
    {h:"Vital signs",t:"BP 115/65 (82); HR 67; afebrile. Position: slouched to the left."},
    {h:"Respiratory",t:"SpO2 96% via NP 2L/min, RR 19."},
@@ -1164,8 +1165,8 @@ const OSCE_CASES = [
    {h:"Cough",t:"Weak, moist, non-productive."},
    {h:"Mobility",t:"Ambulates nil aid, min assist x1 ~20m."}
   ]},
- {id:"layah",name:"Layah",cat:"Interstitial lung disease",dx:"IPF exacerbation; 4th admission in 12 months",age:58,sex:"F",
-  intro:"Layah is a 58-year-old woman admitted 4 days ago with an exacerbation of her interstitial lung disease — her fourth admission in 12 months. The medical team are eager to discharge her tomorrow or the day after.",
+ {id:"layah",name:"Helen Foster",cat:"Interstitial lung disease",dx:"IPF exacerbation; 4th admission in 12 months",age:58,sex:"F",
+  intro:"Helen is a 58-year-old woman admitted 4 days ago with an exacerbation of her interstitial lung disease — her fourth admission in 12 months. The medical team are eager to discharge her tomorrow or the day after.",
   sections:[
    {h:"Past medical history",t:"Idiopathic pulmonary fibrosis diagnosed one year ago. Osteoarthritis both knees."},
    {h:"Medication",t:"Pirfenidone (anti-fibrotic), oral Prednisolone, Paracetamol PRN."},
@@ -1179,8 +1180,8 @@ const OSCE_CASES = [
    {h:"Cough / strength",t:"Weak, dry, non-productive. Strength: UL global 4+/5, LL global 4/5."},
    {h:"Mobility",t:"Ambulates independently with portable O2 ~40m // limited by exertional SOB and fatigue."}
   ]},
- {id:"tyla",name:"Tyla",cat:"Cystic fibrosis",dx:"Outpatient CF review",age:22,sex:"F",
-  intro:"Tyla is a 22-year-old woman attending the outpatient physiotherapy department for ongoing review and management of her cystic fibrosis.",
+ {id:"tyla",name:"Emily Jones",cat:"Cystic fibrosis",dx:"Outpatient CF review",age:22,sex:"F",
+  intro:"Emily is a 22-year-old woman attending the outpatient physiotherapy department for ongoing review and management of her cystic fibrosis.",
   sections:[
    {h:"Past medical history",t:"Cystic fibrosis, pancreatic insufficiency, diabetes mellitus."},
    {h:"Medication",t:"Inhaled Tobramycin, hypertonic saline 6% twice daily, Pulmozyme, Salbutamol MDI BD, insulin."},
@@ -1197,18 +1198,15 @@ const OSCE_CASES = [
 ];
 const OSCE_CATS = ["All","Cardiac surgery","Pneumonia","Bronchiectasis","Abdominal surgery","Thoracic surgery","COPD","Trauma / chest","Interstitial lung disease","Cystic fibrosis"];
 
-let osceState={cat:"All",read:120,perf:480,timer:null,phase:null,remain:0,caseId:null};
+let osceState={cat:"All",caseId:null};
 function osceScores(){try{return JSON.parse(localStorage.getItem("prx_osce")||"{}");}catch(e){return {};}}
 function saveOsceScore(id,score){const s=osceScores();s[id]={score:score,when:Date.now()};try{localStorage.setItem("prx_osce",JSON.stringify(s));}catch(e){}}
-function fmtTime(sec){const m=Math.floor(sec/60),s=sec%60;return m+":"+(s<10?"0":"")+s;}
 function renderStem(c){let h='<div class="osce-stem-intro">'+escapeHtml(c.intro)+'</div>';c.sections.forEach(function(sec){h+='<div class="osce-sec"><span class="osce-sec-h">'+escapeHtml(sec.h)+'</span> '+escapeHtml(sec.t)+'</div>';});h+='<div class="osce-instr"><b>Instructions:</b> Perform a safe and effective treatment.</div>';return h;}
 
 function openOsce(){$("#menu").classList.add("hidden");$("#osce").classList.remove("hidden");osceList();window.scrollTo({top:0,behavior:"smooth"});}
-function osceClose(){osceStopTimer();$("#osce").classList.add("hidden");$("#menu").classList.remove("hidden");refreshTierUI();window.scrollTo({top:0,behavior:"smooth"});}
-function osceStopTimer(){if(osceState.timer){clearInterval(osceState.timer);osceState.timer=null;}}
+function osceClose(){$("#osce").classList.add("hidden");$("#menu").classList.remove("hidden");refreshTierUI();window.scrollTo({top:0,behavior:"smooth"});}
 
 function osceList(){
-  osceStopTimer();
   const scores=osceScores();
   let cats='<div class="seg osce-cats" id="osceCatSeg">'+OSCE_CATS.map(function(c){return '<button data-cat="'+escapeAttr(c)+'"'+(c===osceState.cat?' class="active"':'')+'>'+escapeHtml(c)+'</button>';}).join('')+'</div>';
   const list=OSCE_CASES.filter(function(c){return osceState.cat==="All"||c.cat===osceState.cat;});
@@ -1219,16 +1217,8 @@ function osceList(){
     cards+='<button class="osce-card" data-id="'+c.id+'"><div class="osce-card-top"><span class="osce-cat-chip">'+escapeHtml(c.cat)+'</span>'+badge+'</div><div class="osce-card-name">'+escapeHtml(c.name)+'</div><div class="osce-card-dx">'+escapeHtml(c.dx)+'</div><div class="osce-card-meta">'+c.age+'yo '+c.sex+'</div></button>';
   });
   cards+='</div>';
-  const settings='<div class="osce-settings">'+
-    '<div class="field" style="margin:0"><label class="lbl">Reading time</label><div class="seg small" id="osceReadSeg">'+
-      [["1 min",60],["2 min",120],["Off",0]].map(function(o){return '<button data-v="'+o[1]+'"'+(osceState.read===o[1]?' class="active"':'')+'>'+o[0]+'</button>';}).join('')+'</div></div>'+
-    '<div class="field" style="margin:0"><label class="lbl">Performance time</label><div class="seg small" id="oscePerfSeg">'+
-      [["5 min",300],["8 min",480],["10 min",600]].map(function(o){return '<button data-v="'+o[1]+'"'+(osceState.perf===o[1]?' class="active"':'')+'>'+o[0]+'</button>';}).join('')+'</div></div>'+
-    '</div>';
-  $("#osceBody").innerHTML='<div class="osce-intro">Choose a station to sit it under exam timing. You read the case during reading time, then talk/work through your treatment out loud during performance time, then self-assess against the checklist.</div>'+settings+cats+'<button class="metalBtn" id="osceRandom" style="margin:4px 0 14px">🎲 Random station from this filter</button>'+cards;
+  $("#osceBody").innerHTML='<div class="osce-intro">Choose a station, read the case, then talk or work through your treatment out loud as if the examiner is watching — and self-assess against the checklist at the end.<div class="osce-tip">⏱ <b>Tip:</b> there is no timer built in, but timing yourself closely replicates real exam conditions. A typical cardiorespiratory station runs about 1–2 minutes reading followed by 5–8 minutes of performance — set a timer on your phone before you begin.</div></div>'+cats+'<button class="metalBtn" id="osceRandom" style="margin:4px 0 14px">🎲 Random station from this filter</button>'+cards;
   $("#osceBody").querySelectorAll("#osceCatSeg button").forEach(function(b){b.onclick=function(){osceState.cat=b.dataset.cat;osceList();};});
-  $("#osceBody").querySelectorAll("#osceReadSeg button").forEach(function(b){b.onclick=function(){osceState.read=parseInt(b.dataset.v);document.querySelectorAll("#osceReadSeg button").forEach(function(x){x.classList.toggle("active",x===b);});};});
-  $("#osceBody").querySelectorAll("#oscePerfSeg button").forEach(function(b){b.onclick=function(){osceState.perf=parseInt(b.dataset.v);document.querySelectorAll("#oscePerfSeg button").forEach(function(x){x.classList.toggle("active",x===b);});};});
   $("#osceBody").querySelectorAll(".osce-card").forEach(function(b){b.onclick=function(){osceStart(b.dataset.id);};});
   const rnd=$("#osceRandom");if(rnd)rnd.onclick=function(){if(!list.length)return;osceStart(list[Math.floor(Math.random()*list.length)].id);};
 }
@@ -1236,40 +1226,22 @@ function osceList(){
 function osceStart(id){
   const c=OSCE_CASES.find(function(x){return x.id===id;});if(!c)return;
   osceState.caseId=id;
-  if(osceState.read>0){osceRunPhase(c,"reading",osceState.read);}else{osceRunPhase(c,"performance",osceState.perf);}
+  osceRunStation(c);
 }
-function osceRunPhase(c,phase,seconds){
-  osceStopTimer();osceState.phase=phase;osceState.remain=seconds;
-  const reading=phase==="reading";
-  const phaseLabel=reading?"Reading time":"Performance";
-  const sub=reading?"Read the case. The marking checklist is hidden until performance ends.":"Talk through your treatment out loud as if the examiner is watching.";
+function osceRunStation(c){
   let h='<div class="osce-run">';
-  h+='<div class="osce-runbar"><button class="exitbtn" id="osceBack">← All stations</button><span class="osce-phase '+(reading?"reading":"perf")+'">'+phaseLabel+'</span><span class="osce-clock" id="osceClock">'+fmtTime(seconds)+'</span></div>';
-  h+='<div class="osce-runsub">'+sub+'</div>';
+  h+='<div class="osce-runbar"><button class="exitbtn" id="osceBack">← All stations</button><span class="osce-phase reading">Station</span></div>';
+  h+='<div class="osce-runsub">Read the case, then work through your treatment out loud. Reveal the self-assessment checklist when you finish.</div>';
   h+='<div class="osce-casehead"><span class="osce-cat-chip">'+escapeHtml(c.cat)+'</span><h3>'+escapeHtml(c.name)+'</h3><div class="osce-card-dx">'+escapeHtml(c.dx)+'</div></div>';
   h+='<div class="osce-stem">'+renderStem(c)+'</div>';
-  if(!reading){h+='<div class="field" style="margin-top:14px"><label class="lbl">Scratchpad (your treatment plan)</label><textarea id="osceNotes" placeholder="Jot your safety checks, treatment choices and reasoning here…" style="min-height:120px"></textarea></div>';}
-  h+='<div class="osce-runbtns">';
-  if(reading){h+='<button class="metalBtn" id="osceToPerf">Start performance →</button>';}
-  else{h+='<button class="metalBtn" id="osceReveal">End & reveal checklist</button>';}
-  h+='</div></div>';
+  h+='<div class="field" style="margin-top:14px"><label class="lbl">Scratchpad (your treatment plan)</label><textarea id="osceNotes" placeholder="Jot your safety checks, treatment choices and reasoning here…" style="min-height:120px"></textarea></div>';
+  h+='<div class="osce-runbtns"><button class="metalBtn" id="osceReveal">Reveal self-assessment checklist</button></div></div>';
   $("#osceBody").innerHTML=h;
   $("#osceBack").onclick=osceList;
-  const clk=$("#osceClock");
-  osceState.timer=setInterval(function(){
-    osceState.remain--;
-    if(osceState.remain<=0){clk.textContent="0:00";clk.classList.add("done");osceStopTimer();
-      if(reading){osceRunPhase(c,"performance",osceState.perf);}else{toast("Time! Reveal the checklist when ready.");}
-      return;}
-    clk.textContent=fmtTime(osceState.remain);
-    if(osceState.remain<=30)clk.classList.add("low");
-  },1000);
-  if(reading){$("#osceToPerf").onclick=function(){osceRunPhase(c,"performance",osceState.perf);};}
-  else{$("#osceReveal").onclick=function(){osceReveal(c);};}
+  $("#osceReveal").onclick=function(){osceReveal(c);};
 }
 
 function osceReveal(c){
-  osceStopTimer();
   const notes=$("#osceNotes")?$("#osceNotes").value:"";
   const checklist=[
    "Introduction, consent and patient identification",
