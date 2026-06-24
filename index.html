@@ -224,6 +224,13 @@
   .tutor-ask{display:flex;gap:8px;margin-top:10px}
   .tutor-ask input{flex:1}
   .tutor-ask button{background:var(--metal);border:none;color:#141417;font-weight:700;border-radius:9px;padding:0 16px;cursor:pointer}
+  .quiztop{display:flex;justify-content:flex-end;margin-bottom:6px}
+  .exitbtn{background:#15151a;border:1px solid var(--line2);color:var(--muted);font-size:12.5px;font-weight:600;padding:8px 13px;border-radius:9px;cursor:pointer}
+  .exitbtn:hover{border-color:var(--silver3);color:var(--text)}
+  .resumebox{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between;border:1px solid var(--silver3);border-radius:12px;padding:14px 16px;margin-bottom:16px;background:linear-gradient(180deg,#1a1a1e,#101013)}
+  .resumebox .rb-t{font-size:13.5px;font-weight:600}
+  .resumebox .rb-s{font-size:12px;color:var(--muted);margin-top:2px}
+  .resumebox .rb-btns{display:flex;gap:8px}
   .hidden{display:none}
 </style>
 </head>
@@ -286,6 +293,10 @@
 
   <!-- ===== MENU ===== -->
   <section id="menu" class="hidden">
+    <div class="resumebox hidden" id="resumeBox">
+      <div><div class="rb-t">Resume saved session</div><div class="rb-s" id="resumeInfo"></div></div>
+      <div class="rb-btns"><button class="metalBtn" id="resumeBtn" style="width:auto;padding:10px 16px">Resume</button><button class="ghostBtn" id="resumeDiscard" style="width:auto;padding:10px 16px">Discard</button></div>
+    </div>
     <div class="panel">
       <h2>Begin a session</h2>
       <div class="field"><label class="lbl">Stream</label>
@@ -322,6 +333,7 @@
 
   <!-- ===== QUIZ ===== -->
   <section id="quiz" class="hidden">
+    <div class="quiztop"><button class="exitbtn" id="exitSaveBtn">← Save &amp; exit</button></div>
     <div class="hud">
       <div class="block"><span class="lab">Score</span><span class="val metal" id="hudScore">0</span></div>
       <div class="block"><span class="lab">Streak</span><span class="val streak"><span class="flame" id="flame">🔥</span><span id="hudStreak">0</span><span class="mult" id="hudMult" style="display:none">×2</span></span></div>
@@ -604,7 +616,7 @@ function loadUsage(){try{const u=JSON.parse(localStorage.getItem("prx_usage"));i
 let USAGE=loadUsage();
 function usageToday(){if(USAGE.date!==todayStr())USAGE={date:todayStr(),n:0};return USAGE.n;}
 function bumpUsage(){if(USAGE.date!==todayStr())USAGE={date:todayStr(),n:0};USAGE.n++;try{localStorage.setItem("prx_usage",JSON.stringify(USAGE));}catch(e){}}
-function refreshTierUI(){const prem=isPremium();const chip=$("#tierChip");if(chip){chip.textContent=prem?"Premium ★":"Free";chip.className="tier-chip "+(prem?"prem":"free");}document.querySelectorAll(".lockpill").forEach(function(l){l.style.display=prem?"none":"";});const ub=$("#upBanner");if(ub)ub.style.display=prem?"none":"";const bar=$("#useBar");if(bar)bar.textContent=prem?"Premium · unlimited questions":(Math.max(0,FREE_LIMIT-usageToday())+" of "+FREE_LIMIT+" free questions left today");}
+function refreshTierUI(){const prem=isPremium();const chip=$("#tierChip");if(chip){chip.textContent=prem?"Premium ★":"Free";chip.className="tier-chip "+(prem?"prem":"free");}document.querySelectorAll(".lockpill").forEach(function(l){l.style.display=prem?"none":"";});const ub=$("#upBanner");if(ub)ub.style.display=prem?"none":"";const bar=$("#useBar");if(bar)bar.textContent=prem?"Premium · unlimited questions":(Math.max(0,FREE_LIMIT-usageToday())+" of "+FREE_LIMIT+" free questions left today");refreshResumeUI();}
 function showUpsell(){const m=document.createElement("div");m.className="modal";m.innerHTML='<div class="modal-card"><h3>Unlock Premium</h3><div class="price">Demo upgrade · no payment taken</div><ul class="feat-list"><li>Unlimited questions, all streams</li><li>In-context AI tutor</li><li>AI custom quizzes on your weak areas</li><li>Performance dashboard &amp; heatmap</li></ul><div class="modal-btns"><button class="ghostBtn" id="upCancel">Not now</button><button class="metalBtn" id="upGo">Upgrade (demo)</button></div></div>';document.body.appendChild(m);m.addEventListener("click",function(e){if(e.target===m)m.remove();});m.querySelector("#upCancel").onclick=function(){m.remove();};m.querySelector("#upGo").onclick=function(){m.remove();setTier("premium");toast("Premium unlocked ✨");};}
 let authMode="signin";
 let sel={stream:"cardio",diff:"all"}, game=null;
@@ -676,10 +688,10 @@ $("#startBtn").onclick=start;
 
 /* ===================== QUIZ ===================== */
 function buildQ(q,stream){return Object.assign({},q,{_stream:stream,order:shuffle(q.o.map(function(t,idx){return {t:t,idx:idx};}))});}
-function runQuiz(qs){game={qs:qs,i:0,score:0,streak:0,best:0,correct:0,answered:0,xpStart:profile.xp,hard:0,prevLevel:lvl(profile.xp)};$("#menu").classList.add("hidden");$("#results").classList.add("hidden");$("#custom").classList.add("hidden");$("#quiz").classList.remove("hidden");hud();question();window.scrollTo({top:0,behavior:"smooth"});}
+function runQuiz(qs,label){clearResume();game={qs:qs,i:0,score:0,streak:0,best:0,correct:0,answered:0,xpStart:profile.xp,hard:0,prevLevel:lvl(profile.xp),label:label||"Session"};$("#menu").classList.add("hidden");$("#results").classList.add("hidden");$("#custom").classList.add("hidden");$("#quiz").classList.remove("hidden");hud();question();window.scrollTo({top:0,behavior:"smooth"});}
 function start(){
   if(!isPremium() && usageToday()>=FREE_LIMIT){ showUpsell(); return; }
-  runQuiz(shuffle(pool()).map(function(q){return buildQ(q,sel.stream);}));
+  runQuiz(shuffle(pool()).map(function(q){return buildQ(q,sel.stream);}), SL[sel.stream]+(sel.diff==="all"?" · mixed":" · "+sel.diff));
 }
 function hud(){
   $("#hudScore").textContent=game.score;$("#hudStreak").textContent=game.streak;
@@ -724,6 +736,7 @@ let tt;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("sh
 
 /* ===================== RESULTS ===================== */
 function finish(){
+  clearResume();
   $("#progFill").style.width="100%";$("#quiz").classList.add("hidden");$("#results").classList.remove("hidden");
   const acc=game.answered?Math.round(game.correct/game.answered*100):0,xg=profile.xp-game.xpStart;
   $("#rScore").textContent=game.score;$("#rAcc").textContent=acc+"%";$("#rCorrect").textContent=game.correct+"/"+game.answered;
@@ -746,7 +759,7 @@ function openCustom(){$("#menu").classList.add("hidden");$("#custom").classList.
 function cqClose(){$("#custom").classList.add("hidden");$("#menu").classList.remove("hidden");refreshTierUI();}
 function allQs(){const out=[];Object.keys(BANK).forEach(function(s){BANK[s].forEach(function(q){out.push({q:q,s:s});});});return out;}
 function buildCustom(){const N=cqState.n;let picked=[];if(cqState.mode==="topic"){const t=($("#cqTopic").value||"").trim().toLowerCase();if(!t){$("#cqHint").textContent="Enter a topic keyword.";return null;}const matches=allQs().filter(function(x){return x.q.q.toLowerCase().indexOf(t)>-1||x.q.e.toLowerCase().indexOf(t)>-1;});if(!matches.length){$("#cqHint").textContent='No questions matched "'+t+'". Try another keyword.';return null;}picked=shuffle(matches).slice(0,N);}else{const scored=allQs().map(function(x){const st=qStat(x.q.q);return {x:x,score:st?st.pct:50};});scored.sort(function(a,b){return a.score-b.score;});picked=scored.slice(0,N).map(function(o){return o.x;});}return picked.map(function(x){return buildQ(x.q,x.s);});}
-function cqGo(){if(!isPremium()){showUpsell();return;}const qs=buildCustom();if(!qs)return;runQuiz(qs);}
+function cqGo(){if(!isPremium()){showUpsell();return;}const qs=buildCustom();if(!qs)return;runQuiz(qs,"Custom quiz");}
 
 /* ----- performance dashboard ----- */
 function openDash(){$("#menu").classList.add("hidden");$("#dash").classList.remove("hidden");renderDash();window.scrollTo({top:0,behavior:"smooth"});}
@@ -763,6 +776,17 @@ $("#dashBtn").onclick=function(){if(!isPremium())return showUpsell();openDash();
 $("#cqDone").onclick=cqClose;$("#dashDone").onclick=dashClose;$("#cqStart").onclick=cqGo;
 document.querySelectorAll('#cqMode button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#cqMode button').forEach(function(x){x.classList.remove('active');});b.classList.add('active');cqState.mode=b.dataset.mode;$("#cqTopicField").style.display=cqState.mode==="topic"?"block":"none";};});
 document.querySelectorAll('#cqCount button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#cqCount button').forEach(function(x){x.classList.remove('active');});b.classList.add('active');cqState.n=parseInt(b.dataset.n);};});
+
+/* ----- save & resume ----- */
+function clearResume(){try{localStorage.removeItem("prx_resume");}catch(e){}}
+function hasResume(){try{return !!localStorage.getItem("prx_resume");}catch(e){return false;}}
+function saveResume(){if(!game)return;try{localStorage.setItem("prx_resume",JSON.stringify(game));}catch(e){}}
+function refreshResumeUI(){const box=$("#resumeBox");if(!box)return;if(hasResume()){try{const g=JSON.parse(localStorage.getItem("prx_resume"));$("#resumeInfo").textContent=(g.label||"Session")+" · Q"+(g.i+1)+" of "+g.qs.length+" · "+g.score+" pts";}catch(e){}box.classList.remove("hidden");}else box.classList.add("hidden");}
+function exitSave(){saveResume();$("#quiz").classList.add("hidden");$("#menu").classList.remove("hidden");refreshTierUI();toast("Session saved — resume any time.");window.scrollTo({top:0,behavior:"smooth"});}
+function resumeSession(){let g;try{g=JSON.parse(localStorage.getItem("prx_resume"));}catch(e){}if(!g)return;game=g;clearResume();$("#menu").classList.add("hidden");$("#results").classList.add("hidden");$("#quiz").classList.remove("hidden");hud();question();refreshResumeUI();window.scrollTo({top:0,behavior:"smooth"});}
+$("#exitSaveBtn").onclick=exitSave;
+$("#resumeBtn").onclick=resumeSession;
+$("#resumeDiscard").onclick=function(){clearResume();refreshResumeUI();};
 
 /* ===================== EDITOR (admin) ===================== */
 let edState={stream:"cardio"};
