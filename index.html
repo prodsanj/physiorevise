@@ -242,7 +242,7 @@
     <div class="crest"><span>P</span></div>
     <div>
       <div class="wordmark">Physio<span class="metal">Revise</span> <span class="au metal">AU</span></div>
-      <div class="sub">Clinical mastery · Premium</div>
+      <div class="sub">Clinical guidance for students &amp; graduates</div>
     </div>
     <div class="hdr-right">
       <span class="premium-pill" id="premPill">Premium</span>
@@ -263,7 +263,7 @@
       <div class="big metal">Master your physiotherapy exams.</div>
       <p>Sign in to access the premium question bank.</p>
     </div>
-    <div class="panel">
+    <div class="panel" id="authPanel">
       <div class="tabs" id="authTabs">
         <button data-mode="signin" class="active">Sign in</button>
         <button data-mode="signup">Create account</button>
@@ -285,10 +285,19 @@
       <div class="features">
         <span><b>80+</b> exam questions</span>
         <span><b>4</b> clinical streams</span>
-        <span><b>XP</b> &amp; achievements</span>
+        <span><b>XP</b> &amp; leaderboards</span>
       </div>
     </div>
-    <p class="disclaimer">⚠ Prototype. This is a demo login — no real account is created and any email/password will sign you in. The live product will use secure Australian-hosted authentication.</p>
+    <div class="panel hidden" id="verifyPanel">
+      <h2 style="color:var(--muted)">Verify your email</h2>
+      <p style="font-size:13.5px;color:#cdd1d8;margin:0 0 14px">We've sent a 6-digit code to <b id="verifyEmail">your email</b>. Enter it below to confirm you're a student or physiotherapist.</p>
+      <div class="field"><label class="lbl">Verification code</label><input type="text" id="verifyCode" inputmode="numeric" maxlength="6" placeholder="123456"></div>
+      <button class="metalBtn" id="verifyBtn">Verify &amp; continue</button>
+      <div class="err" id="verifyErr"></div>
+      <div class="usebar" id="verifyDemo" style="margin-top:12px"></div>
+      <div style="text-align:center;margin-top:10px"><button class="logout" id="verifyBack">← Use a different email</button></div>
+    </div>
+    <p class="disclaimer">⚠ Prototype. This is a demo — sign-in accepts any email/password, and the verification code is shown on screen instead of emailed. The live product sends a real code (or magic link) and can restrict sign-ups to recognised university and workplace email domains, hosted securely in Australia.</p>
   </section>
 
   <!-- ===== MENU ===== -->
@@ -641,16 +650,33 @@ document.querySelectorAll("#authTabs button").forEach(b=>b.onclick=()=>{
   $("#authBtn").textContent = authMode==="signup"?"Create account":"Sign in";
   $("#authErr").textContent="";
 });
+let pendingUser=null, verifyCode=null;
 $("#authBtn").onclick=()=>{
   const name=$("#inName").value.trim(), email=$("#inEmail").value.trim(), pass=$("#inPass").value;
   if(authMode==="signup" && !name){return setErr("Please enter your name.");}
   if(!email || !/.+@.+\..+/.test(email)){return setErr("Please enter a valid email.");}
   if(!pass || pass.length<4){return setErr("Password must be at least 4 characters.");}
-  user={name: authMode==="signup"?name:(loadUser()&&loadUser().email===email?loadUser().name:email.split("@")[0]), email};
+  if(authMode==="signup"){ startVerify(name,email); return; }
+  user={name:(loadUser()&&loadUser().email===email?loadUser().name:email.split("@")[0]), email};
   saveUser();
   enterApp();
 };
 function setErr(m){$("#authErr").textContent=m;}
+function startVerify(name,email){
+  pendingUser={name:name,email:email};
+  verifyCode=""+Math.floor(100000+Math.random()*900000);
+  $("#verifyEmail").textContent=email;
+  $("#verifyDemo").textContent="Demo: your code is "+verifyCode+" (a real email is sent in the live product).";
+  $("#verifyCode").value="";$("#verifyErr").textContent="";
+  $("#authPanel").classList.add("hidden");$("#verifyPanel").classList.remove("hidden");
+}
+$("#verifyBtn").onclick=function(){
+  if($("#verifyCode").value.trim()!==verifyCode){ $("#verifyErr").textContent="Incorrect code — check it and try again."; return; }
+  user={name:pendingUser.name,email:pendingUser.email};saveUser();
+  $("#verifyPanel").classList.add("hidden");$("#authPanel").classList.remove("hidden");
+  enterApp();
+};
+$("#verifyBack").onclick=function(){ $("#verifyPanel").classList.add("hidden");$("#authPanel").classList.remove("hidden"); };
 $("#logoutBtn").onclick=()=>{
   try{localStorage.removeItem("pr_user");}catch(e){} user=null;
   $("#menu").classList.add("hidden");$("#quiz").classList.add("hidden");$("#results").classList.add("hidden");
