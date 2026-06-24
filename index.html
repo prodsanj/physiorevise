@@ -245,7 +245,7 @@
       <div class="sub">Clinical guidance for students &amp; graduates</div>
     </div>
     <div class="hdr-right">
-      <span class="premium-pill" id="premPill">Premium</span>
+      <span class="premium-pill" id="premPill">Beta</span>
       <div class="userbox" id="userBox">
         <span class="tier-chip free" id="tierChip">Free</span>
         <button class="editlink" id="editLink" style="display:none">✎ Edit bank</button>
@@ -269,8 +269,10 @@
         <button data-mode="signup">Create account</button>
       </div>
       <div class="field" id="nameField" style="display:none">
-        <label class="lbl">Full name</label>
-        <input type="text" id="inName" placeholder="e.g. Jordan Smith" autocomplete="name">
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:120px"><label class="lbl">First name</label><input type="text" id="inFirst" placeholder="e.g. Jordan" autocomplete="given-name"></div>
+          <div style="flex:1;min-width:120px"><label class="lbl">Last name</label><input type="text" id="inLast" placeholder="e.g. Smith" autocomplete="family-name"></div>
+        </div>
       </div>
       <div class="field">
         <label class="lbl">University email</label>
@@ -281,6 +283,7 @@
         <input type="password" id="inPass" placeholder="••••••••" autocomplete="current-password">
       </div>
       <button class="metalBtn" id="authBtn">Sign in</button>
+      <div style="text-align:center;margin-top:9px" id="forgotRow"><button class="logout" id="forgotLink">Forgot password?</button></div>
       <div class="err" id="authErr"></div>
       <div class="features">
         <span><b>80+</b> exam questions</span>
@@ -647,13 +650,15 @@ document.querySelectorAll("#authTabs button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("#authTabs button").forEach(x=>x.classList.remove("active"));
   b.classList.add("active");authMode=b.dataset.mode;
   $("#nameField").style.display = authMode==="signup"?"block":"none";
+  $("#forgotRow").style.display = authMode==="signup"?"none":"block";
   $("#authBtn").textContent = authMode==="signup"?"Create account":"Sign in";
   $("#authErr").textContent="";
 });
 let pendingUser=null, verifyCode=null;
 $("#authBtn").onclick=()=>{
-  const name=$("#inName").value.trim(), email=$("#inEmail").value.trim(), pass=$("#inPass").value;
-  if(authMode==="signup" && !name){return setErr("Please enter your name.");}
+  const first=$("#inFirst").value.trim(), last=$("#inLast").value.trim(), email=$("#inEmail").value.trim(), pass=$("#inPass").value;
+  const name=(first+" "+last).trim();
+  if(authMode==="signup" && (!first || !last)){return setErr("Please enter your first and last name.");}
   if(!email || !/.+@.+\..+/.test(email)){return setErr("Please enter a valid email.");}
   if(!pass || pass.length<4){return setErr("Password must be at least 4 characters.");}
   if(authMode==="signup"){ startVerify(name,email); return; }
@@ -662,6 +667,15 @@ $("#authBtn").onclick=()=>{
   enterApp();
 };
 function setErr(m){$("#authErr").textContent=m;}
+function showReset(){
+  const m=document.createElement("div");m.className="modal";const pre=$("#inEmail").value.trim();
+  m.innerHTML='<div class="modal-card"><h3>Reset your password</h3><div class="price">We\'ll email you a secure reset link</div><div class="field" style="text-align:left;margin-top:14px"><label class="lbl">Email</label><input type="email" id="resetEmail" placeholder="you@student.edu.au"></div><div class="modal-btns"><button class="ghostBtn" id="resetCancel">Cancel</button><button class="metalBtn" id="resetGo">Send reset link</button></div><div class="err" id="resetErr"></div></div>';
+  document.body.appendChild(m);if(pre)m.querySelector("#resetEmail").value=pre;
+  m.addEventListener("click",function(e){if(e.target===m)m.remove();});
+  m.querySelector("#resetCancel").onclick=function(){m.remove();};
+  m.querySelector("#resetGo").onclick=function(){const em=m.querySelector("#resetEmail").value.trim();if(!em||!/.+@.+\..+/.test(em)){m.querySelector("#resetErr").textContent="Enter a valid email.";return;}m.remove();toast("If an account exists for "+em+", a reset link has been sent.");};
+}
+$("#forgotLink").onclick=showReset;
 function startVerify(name,email){
   pendingUser={name:name,email:email};
   verifyCode=""+Math.floor(100000+Math.random()*900000);
@@ -682,7 +696,7 @@ $("#logoutBtn").onclick=()=>{
   $("#menu").classList.add("hidden");$("#quiz").classList.add("hidden");$("#results").classList.add("hidden");
   $("#userBox").classList.remove("show");$("#premPill").style.display="";
   $("#gate").classList.remove("hidden");
-  $("#inEmail").value="";$("#inPass").value="";$("#inName").value="";
+  $("#inEmail").value="";$("#inPass").value="";$("#inFirst").value="";$("#inLast").value="";
 };
 
 function enterApp(){
