@@ -17,8 +17,9 @@
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     color:var(--text);line-height:1.55;min-height:100vh;
     background:
-      radial-gradient(1100px 520px at 50% -10%,rgba(61,116,255,.20),transparent 60%),
-      radial-gradient(820px 600px at 92% 112%,rgba(47,107,255,.10),transparent 60%),
+      radial-gradient(820px 460px at 12% -6%,rgba(91,140,255,.26),transparent 62%),
+      radial-gradient(720px 520px at 96% 6%,rgba(124,92,255,.16),transparent 60%),
+      radial-gradient(900px 600px at 60% 116%,rgba(47,107,255,.12),transparent 60%),
       #080b16;}
   .wrap{max-width:680px;margin:0 auto;padding:26px 18px 70px}
 
@@ -265,7 +266,31 @@
   .feat-ic{font-size:22px;margin-bottom:8px}
   .feat b{font-size:14.5px}
   .feat p{font-size:12.5px;color:var(--muted);margin:6px 0 0;line-height:1.55}
-  .home-divider{height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent);margin:36px 0 4px}
+  .home-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(143,176,255,.22),transparent);margin:42px 0 6px}
+  /* ===== free-flowing glass home (scoped to #gate) ===== */
+  #gate .hero-h1,#gate .sec-h{font-weight:400}
+  #gate .flow-s{text-align:center;color:var(--muted);font-size:13px;margin:0 0 22px}
+  #gate .hero-visual{position:relative}
+  #gate .hero-visual:before{content:"";position:absolute;inset:-26px;background:radial-gradient(closest-side,rgba(91,140,255,.45),transparent);filter:blur(34px);z-index:0}
+  #gate .demo-card{position:relative;z-index:1;background:rgba(255,255,255,.05);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(143,176,255,.16);border-radius:22px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+  #gate .demo-opt{background:rgba(255,255,255,.04);border:1px solid rgba(143,176,255,.10);border-radius:12px}
+  #gate .path-card{background:none;border:none;text-align:center;align-items:center;border-radius:18px}
+  #gate .path-card:hover{background:rgba(143,176,255,.06);transform:translateY(-3px)}
+  #gate .pico{width:54px;height:54px;border-radius:50%;background:rgba(143,176,255,.10);border:1px solid rgba(143,176,255,.18);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px}
+  #gate .path-card b{margin-top:0}
+  #gate .feat-grid{gap:26px 22px}
+  #gate .feat{background:none;border:none;padding:0}
+  #gate .feat-ic{width:44px;height:44px;border-radius:14px;background:var(--metal);display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 8px 22px rgba(63,116,255,.32)}
+  #gate .panel{background:rgba(255,255,255,.05);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(143,176,255,.16);border-radius:22px;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+  #gate .tabs{border:none;background:none;gap:26px;justify-content:center;margin-bottom:20px}
+  #gate .tabs button{flex:0 0 auto;background:none;color:var(--muted);padding:8px 2px;font-size:14px;position:relative;border-radius:0}
+  #gate .tabs button.active{background:none;color:var(--text)}
+  #gate .tabs button.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px;background:var(--metal)}
+  #gate input[type=text],#gate input[type=email],#gate input[type=password]{background:none;border:none;border-bottom:1px solid rgba(143,176,255,.22);border-radius:0;padding:9px 2px}
+  #gate input[type=text]:focus,#gate input[type=email]:focus,#gate input[type=password]:focus{box-shadow:none;border-bottom-color:var(--accent)}
+  #gate .field select{background:rgba(255,255,255,.04);border:1px solid rgba(143,176,255,.16)}
+  #gate .metalBtn{border-radius:999px}
+  #gate .ghostBtn{border-radius:999px;background:none;border:1px solid rgba(143,176,255,.22)}
   .field select{width:100%;background:#0c1020;color:var(--text);border:1px solid var(--line2);padding:12px 13px;border-radius:10px;font-size:14px;font-family:inherit}
   .field select:focus{outline:none;border-color:var(--silver2);box-shadow:0 0 0 3px rgba(91,140,255,.16)}
   .hidden{display:none}
@@ -320,10 +345,11 @@
     <!-- PATHS -->
     <div id="howsection">
       <h2 class="sec-h">Choose your path</h2>
+      <p class="flow-s">Tailored to where you are right now.</p>
       <div class="path-grid">
-        <button class="path-card" data-role="University student">🎓<b>University student</b><span>OSCE &amp; theory across your degree</span></button>
-        <button class="path-card" data-role="Overseas-trained physio (APEP)">🌏<b>Overseas-trained physio</b><span>Prepare for the APEP pathway</span></button>
-        <button class="path-card" data-role="New graduate">🩺<b>New graduate</b><span>Sharpen clinical reasoning</span></button>
+        <button class="path-card" data-role="University student"><span class="pico">🎓</span><b>University student</b><span>OSCE &amp; theory across your degree</span></button>
+        <button class="path-card" data-role="Overseas-trained physio (APEP)"><span class="pico">🌏</span><b>Overseas-trained physio</b><span>Prepare for the APEP pathway</span></button>
+        <button class="path-card" data-role="New graduate"><span class="pico">🩺</span><b>New graduate</b><span>Sharpen clinical reasoning</span></button>
       </div>
     </div>
 
@@ -332,7 +358,7 @@
       <h2 class="sec-h">Revision that keeps you coming back</h2>
       <div class="feat-grid">
         <div class="feat"><div class="feat-ic">⚡</div><b>Gamified practice</b><p>XP, levels, streaks and badges turn study into momentum.</p></div>
-        <div class="feat"><div class="feat-ic">🧠</div><b>AI tutor &amp; custom quizzes</b><p>Ask "why is this the answer?" and drill your weak areas on demand.</p></div>
+        <div class="feat"><div class="feat-ic">🧠</div><b>Deeper understanding</b><p>Go beyond the answer with in-depth explanations and practice that targets your weak areas.</p></div>
         <div class="feat"><div class="feat-ic">📊</div><b>Know your gaps</b><p>A strength/weakness heatmap shows exactly what to revise next.</p></div>
         <div class="feat"><div class="feat-ic">🩻</div><b>OSCE + theory</b><p>Cardiorespiratory, MSK, neurological and anatomy in one place.</p></div>
       </div>
@@ -427,7 +453,7 @@
     </div>
     <div class="upbanner" id="upBanner">
       <h3>Upgrade to Premium</h3>
-      <p>Unlimited questions across all streams · AI tutor · AI custom quizzes · performance dashboard.</p>
+      <p>Unlimited questions across all streams · in-depth explanations · personalised practice · performance dashboard.</p>
       <button class="metalBtn" id="upBtn" style="width:auto;padding:11px 22px">Upgrade (demo)</button>
     </div>
     <p class="disclaimer">80 sample questions across four streams · illustrative content, physio-reviewed in the live product · not clinical or exam advice.</p>
@@ -808,7 +834,7 @@ let USAGE=loadUsage();
 function usageToday(){if(USAGE.date!==todayStr())USAGE={date:todayStr(),n:0};return USAGE.n;}
 function bumpUsage(){if(USAGE.date!==todayStr())USAGE={date:todayStr(),n:0};USAGE.n++;try{localStorage.setItem("prx_usage",JSON.stringify(USAGE));}catch(e){}}
 function refreshTierUI(){const prem=isPremium();const chip=$("#tierChip");if(chip){chip.textContent=prem?"Premium ★":"Free";chip.className="tier-chip "+(prem?"prem":"free");}document.querySelectorAll(".lockpill").forEach(function(l){l.style.display=prem?"none":"";});const ub=$("#upBanner");if(ub)ub.style.display=prem?"none":"";const bar=$("#useBar");if(bar)bar.textContent=prem?"Premium · unlimited questions":(Math.max(0,FREE_LIMIT-usageToday())+" of "+FREE_LIMIT+" free questions left today");refreshResumeUI();}
-function showUpsell(){const m=document.createElement("div");m.className="modal";m.innerHTML='<div class="modal-card"><h3>Unlock Premium</h3><div class="price">Demo upgrade · no payment taken</div><ul class="feat-list"><li>Unlimited questions, all streams</li><li>In-context AI tutor</li><li>AI custom quizzes on your weak areas</li><li>Performance dashboard &amp; heatmap</li></ul><div class="modal-btns"><button class="ghostBtn" id="upCancel">Not now</button><button class="metalBtn" id="upGo">Upgrade (demo)</button></div></div>';document.body.appendChild(m);m.addEventListener("click",function(e){if(e.target===m)m.remove();});m.querySelector("#upCancel").onclick=function(){m.remove();};m.querySelector("#upGo").onclick=function(){m.remove();setTier("premium");toast("Premium unlocked ✨");};}
+function showUpsell(){const m=document.createElement("div");m.className="modal";m.innerHTML='<div class="modal-card"><h3>Unlock Premium</h3><div class="price">Demo upgrade · no payment taken</div><ul class="feat-list"><li>Unlimited questions, all streams</li><li>In-depth explanations &amp; guided reasoning</li><li>Personalised practice on your weak areas</li><li>Performance dashboard &amp; heatmap</li></ul><div class="modal-btns"><button class="ghostBtn" id="upCancel">Not now</button><button class="metalBtn" id="upGo">Upgrade (demo)</button></div></div>';document.body.appendChild(m);m.addEventListener("click",function(e){if(e.target===m)m.remove();});m.querySelector("#upCancel").onclick=function(){m.remove();};m.querySelector("#upGo").onclick=function(){m.remove();setTier("premium");toast("Premium unlocked ✨");};}
 let authMode="signin";
 let sel={stream:"cardio",diff:"all"}, game=null;
 let profile=loadProfile(), user=loadUser();
@@ -840,12 +866,12 @@ $("#ctaStart").onclick=function(){setAuthMode("signup");gotoAuth();};
 $("#ctaHow").onclick=function(){var el=document.getElementById("howsection");if(el)el.scrollIntoView({behavior:"smooth",block:"start"});};
 document.querySelectorAll(".path-card").forEach(function(c){c.onclick=function(){setAuthMode("signup");$("#inRole").value=c.dataset.role;gotoAuth();};});
 var demoQs=[
- {q:"A breathless COPD patient who retains CO₂ — target SpO₂ range?",o:["88–92%","98–100%","80–85%"],a:0},
- {q:"Most sensitive clinical test for a suspected ACL tear?",o:["McMurray's test","Lachman's test","Thomas test"],a:1},
- {q:"Foot drop reflects weakness of which muscle group?",o:["Plantarflexors","Dorsiflexors","Hip flexors"],a:1}
+ {q:"A breathless COPD patient who retains CO₂ — target SpO₂ range?",o:["88–92%","98–100%","80–85%","Below 80%"],a:0},
+ {q:"Most sensitive clinical test for a suspected ACL tear?",o:["McMurray's test","Lachman's test","Thomas test","Apprehension test"],a:1},
+ {q:"Foot drop reflects weakness of which muscle group?",o:["Plantarflexors","Dorsiflexors","Hip flexors","Knee extensors"],a:1}
 ];
 var demoI=0;
-function renderDemo(){var d=demoQs[demoI],keys=["A","B","C"],h="";d.o.forEach(function(t,n){h+='<div class="demo-opt'+(n===d.a?" ok":"")+'"><span class="k">'+keys[n]+'</span><span>'+t+'</span></div>';});var qe=document.getElementById("demoQ"),oe=document.getElementById("demoOpts");if(qe&&oe){qe.textContent=d.q;oe.innerHTML=h;}}
+function renderDemo(){var d=demoQs[demoI],keys=["A","B","C","D"],h="";d.o.forEach(function(t,n){h+='<div class="demo-opt'+(n===d.a?" ok":"")+'"><span class="k">'+keys[n]+'</span><span>'+t+'</span></div>';});var qe=document.getElementById("demoQ"),oe=document.getElementById("demoOpts");if(qe&&oe){qe.textContent=d.q;oe.innerHTML=h;}}
 if(document.getElementById("demoQ")){renderDemo();setInterval(function(){demoI=(demoI+1)%demoQs.length;renderDemo();},3800);}
 let pendingUser=null, verifyCode=null;
 $("#authBtn").onclick=()=>{
@@ -986,7 +1012,7 @@ $("#menuBtn").onclick=()=>{$("#results").classList.add("hidden");$("#menu").clas
 
 /* ===================== PREMIUM FEATURES ===================== */
 function addRationale(card,q){const ex=card.querySelector(".explain");if(!ex)return;const w=document.createElement("div");w.className="tutor";if(isPremium()){w.innerHTML='<button class="tutorBtn">📖 Full rationale &amp; references</button>';w.querySelector("button").onclick=function(){const body=q.r?escapeHtml(q.r).replace(/\n/g,"<br>"):"A fuller rationale — with references where relevant — can be added here by the clinical reviewer. The concise explanation above already covers the key point for this question.";w.innerHTML='<div class="tutor-panel"><div class="who">Full rationale &amp; references</div><div>'+body+'</div></div>';};}else{w.innerHTML='<button class="tutorBtn">📖 Full rationale &amp; references <span class="lockpill">Premium</span></button>';w.querySelector("button").onclick=function(){showUpsell();};}ex.appendChild(w);}
-function addTutor(card,q){const ex=card.querySelector(".explain");if(!ex)return;const tWrap=document.createElement("div");tWrap.className="tutor";if(isPremium()){tWrap.innerHTML='<button class="tutorBtn">💬 Ask the AI tutor</button>';tWrap.querySelector("button").onclick=function(){tWrap.innerHTML='<div class="tutor-panel"><div class="who">AI tutor</div><div>'+escapeHtml(q.e)+'</div><div class="tutor-ask"><input type="text" placeholder="Ask a follow-up…"><button>Ask</button></div><div class="tutor-reply" style="margin-top:8px;color:var(--muted);font-size:12.5px"></div></div>';const inp=tWrap.querySelector("input"),rep=tWrap.querySelector(".tutor-reply");tWrap.querySelector(".tutor-ask button").onclick=function(){if(!inp.value.trim())return;rep.textContent="In the live product the AI tutor answers follow-ups conversationally. Connect the AI model (backend) to enable full responses.";inp.value="";};};}else{tWrap.innerHTML='<button class="tutorBtn">💬 Ask the AI tutor <span class="lockpill">Premium</span></button>';tWrap.querySelector("button").onclick=function(){showUpsell();};}ex.appendChild(tWrap);}
+function addTutor(card,q){const ex=card.querySelector(".explain");if(!ex)return;const tWrap=document.createElement("div");tWrap.className="tutor";if(isPremium()){tWrap.innerHTML='<button class="tutorBtn">💬 Explain in more depth</button>';tWrap.querySelector("button").onclick=function(){tWrap.innerHTML='<div class="tutor-panel"><div class="who">Guided explanation</div><div>'+escapeHtml(q.e)+'</div><div class="tutor-ask"><input type="text" placeholder="Ask a follow-up question…"><button>Ask</button></div><div class="tutor-reply" style="margin-top:8px;color:var(--muted);font-size:12.5px"></div></div>';const inp=tWrap.querySelector("input"),rep=tWrap.querySelector(".tutor-reply");tWrap.querySelector(".tutor-ask button").onclick=function(){if(!inp.value.trim())return;rep.textContent="In the live product, follow-up questions are answered in more depth. Connect the AI model (backend) to enable full responses.";inp.value="";};};}else{tWrap.innerHTML='<button class="tutorBtn">💬 Explain in more depth <span class="lockpill">Premium</span></button>';tWrap.querySelector("button").onclick=function(){showUpsell();};}ex.appendChild(tWrap);}
 
 /* ----- custom quiz ----- */
 let cqState={mode:"weak",n:10};
