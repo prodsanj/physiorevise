@@ -10,7 +10,7 @@
     --text:#eaf0fb; --muted:#8f9bb6;
     --silver1:#cfe0ff; --silver2:#8fb0ff; --silver3:#5d76b8;
     --metal:linear-gradient(135deg,#5b8cff,#2f6bff 52%,#1e46c8);
-    --accent:#5b8cff; --good:#4fd1a0; --bad:#ff6b6b; --warn:#ffce4d;
+    --accent:#5b8cff; --good:#10b981; --bad:#ff6b6b; --warn:#ffce4d;
     --radius:14px; --shadow:0 12px 44px rgba(0,0,0,.6);
   }
   *{box-sizing:border-box}
@@ -125,7 +125,7 @@
   .opt .key{font-weight:700;color:var(--silver2);width:18px;flex:none}
   .opt .txt{flex:1}
   .opt .mark{flex:none;font-weight:800;font-size:18px;opacity:0;transition:.12s}
-  .opt.correct{border-color:var(--good);background:rgba(116,201,163,.10)}
+  .opt.correct{border-color:var(--good);background:rgba(16,185,129,.16)}
   .opt.correct .mark{opacity:1;color:var(--good)}
   .opt.wrong{border-color:var(--bad);background:rgba(224,133,133,.10)}
   .opt.wrong .mark{opacity:1;color:var(--bad)}
@@ -252,8 +252,10 @@
   .demo-chip{margin-left:auto;background:var(--metal);color:#fff;font-weight:800;font-size:11px;padding:3px 10px;border-radius:999px}
   .demo-q{font-size:14px;font-weight:600;margin-bottom:12px;min-height:56px;transition:opacity .3s}
   .demo-opt{display:flex;align-items:center;gap:9px;background:#0e1430;border:1px solid var(--line2);padding:10px 12px;border-radius:9px;margin-bottom:8px;font-size:13px}
-  .demo-opt.ok{border-color:var(--good);background:rgba(79,209,160,.12)}
-  .demo-opt.ok:after{content:"✓";margin-left:auto;color:var(--good);font-weight:800}
+  .demo-opt.sel{border-color:var(--good);background:rgba(16,185,129,.22);box-shadow:0 0 0 1px rgba(16,185,129,.4)}
+  .demo-opt.click{animation:democlick .35s ease}
+  @keyframes democlick{0%{transform:scale(1)}40%{transform:scale(.97)}100%{transform:scale(1)}}
+  .demo-cursor{position:absolute;left:0;top:0;width:22px;height:22px;z-index:6;pointer-events:none;opacity:0;transition:transform .8s cubic-bezier(.45,.5,.25,1),opacity .3s;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
   .demo-opt .k{color:var(--accent);font-weight:700}
   .sec-h{font-family:Georgia,serif;font-size:22px;text-align:center;margin:36px 0 16px}
   .path-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
@@ -347,6 +349,7 @@
           <div class="demo-hud"><span class="demo-flame">🔥</span><span id="demoStreak">Streak 8</span><span class="demo-chip">×3 XP</span></div>
           <div class="demo-q" id="demoQ"></div>
           <div id="demoOpts"></div>
+          <div class="demo-cursor" id="demoCursor"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 2 L4 20 L9.2 15 L12.4 21.6 L15.2 20.4 L12 14 L19 14 Z" fill="#fff" stroke="#0b1020" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
         </div>
       </div>
     </div>
@@ -882,8 +885,14 @@ var demoQs=[
  {q:"Foot drop reflects weakness of which muscle group?",o:["Plantarflexors","Dorsiflexors","Hip flexors","Knee extensors"],a:1}
 ];
 var demoI=0;
-function renderDemo(){var d=demoQs[demoI],keys=["A","B","C","D"],h="";d.o.forEach(function(t,n){h+='<div class="demo-opt'+(n===d.a?" ok":"")+'"><span class="k">'+keys[n]+'</span><span>'+t+'</span></div>';});var qe=document.getElementById("demoQ"),oe=document.getElementById("demoOpts");if(qe&&oe){qe.textContent=d.q;oe.innerHTML=h;}}
-if(document.getElementById("demoQ")){renderDemo();setInterval(function(){demoI=(demoI+1)%demoQs.length;renderDemo();},3800);}
+var demoTimers=[];
+function clearDemoTimers(){demoTimers.forEach(clearTimeout);demoTimers=[];}
+function renderDemo(){clearDemoTimers();var d=demoQs[demoI],keys=["A","B","C","D"],h="";d.o.forEach(function(t,n){h+='<div class="demo-opt" data-i="'+n+'"><span class="k">'+keys[n]+'</span><span>'+t+'</span></div>';});var qe=document.getElementById("demoQ"),oe=document.getElementById("demoOpts"),cur=document.getElementById("demoCursor");if(!qe||!oe)return;qe.textContent=d.q;oe.innerHTML=h;if(cur){cur.style.opacity="0";cur.style.transform="translate(150px,158px)";}
+  demoTimers.push(setTimeout(function(){var opt=oe.querySelector('.demo-opt[data-i="'+d.a+'"]');if(!opt||!cur)return;cur.style.opacity="1";cur.style.transform="translate("+(opt.offsetLeft+opt.offsetWidth-42)+"px,"+(opt.offsetTop+opt.offsetHeight/2-3)+"px)";},650));
+  demoTimers.push(setTimeout(function(){var opt=oe.querySelector('.demo-opt[data-i="'+d.a+'"]');if(opt){opt.classList.add("sel");opt.classList.add("click");}},1550));
+  demoTimers.push(setTimeout(function(){if(cur)cur.style.opacity="0";},2700));
+}
+if(document.getElementById("demoQ")){renderDemo();setInterval(function(){demoI=(demoI+1)%demoQs.length;renderDemo();},4200);}
 let pendingUser=null, verifyCode=null;
 $("#authBtn").onclick=()=>{
   const first=$("#inFirst").value.trim(), last=$("#inLast").value.trim(), email=$("#inEmail").value.trim(), pass=$("#inPass").value;
