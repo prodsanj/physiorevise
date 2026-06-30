@@ -291,6 +291,11 @@
   #gate .field select{background:rgba(255,255,255,.04);border:1px solid rgba(143,176,255,.16)}
   #gate .metalBtn{border-radius:999px}
   #gate .ghostBtn{border-radius:999px;background:none;border:1px solid rgba(143,176,255,.22)}
+  .home-nav{display:flex;align-items:center;gap:14px}
+  .signin-link{background:none;border:none;color:var(--muted);font-size:13.5px;font-weight:600;cursor:pointer;padding:6px 2px}
+  .signin-link:hover{color:var(--text)}
+  .nav-start{background:var(--metal);color:#fff;border:none;padding:9px 18px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(63,116,255,.32)}
+  .nav-start:hover{filter:brightness(1.06)}
   .field select{width:100%;background:#0c1020;color:var(--text);border:1px solid var(--line2);padding:12px 13px;border-radius:10px;font-size:14px;font-family:inherit}
   .field select:focus{outline:none;border-color:var(--silver2);box-shadow:0 0 0 3px rgba(91,140,255,.16)}
   .hidden{display:none}
@@ -308,6 +313,10 @@
     </div>
     <div class="hdr-right">
       <span class="premium-pill" id="premPill">Beta</span>
+      <div class="home-nav" id="homeNav">
+        <button class="signin-link" id="navSignIn">Sign in</button>
+        <button class="nav-start" id="navStart">Start free</button>
+      </div>
       <div class="userbox" id="userBox">
         <span class="tier-chip free" id="tierChip">Free</span>
         <button class="editlink" id="editLink" style="display:none">✎ Edit bank</button>
@@ -863,6 +872,8 @@ function setAuthMode(mode){
 document.querySelectorAll("#authTabs button").forEach(b=>b.onclick=()=>setAuthMode(b.dataset.mode));
 function gotoAuth(){var el=document.getElementById("authAnchor");if(el)el.scrollIntoView({behavior:"smooth",block:"start"});setTimeout(function(){var f=$("#inFirst");if(f&&authMode==="signup")f.focus();else $("#inEmail").focus();},420);}
 $("#ctaStart").onclick=function(){setAuthMode("signup");gotoAuth();};
+$("#navStart").onclick=function(){setAuthMode("signup");gotoAuth();};
+$("#navSignIn").onclick=function(){setAuthMode("signin");gotoAuth();};
 $("#ctaHow").onclick=function(){var el=document.getElementById("howsection");if(el)el.scrollIntoView({behavior:"smooth",block:"start"});};
 document.querySelectorAll(".path-card").forEach(function(c){c.onclick=function(){setAuthMode("signup");$("#inRole").value=c.dataset.role;gotoAuth();};});
 var demoQs=[
@@ -913,7 +924,7 @@ $("#verifyBack").onclick=function(){ $("#verifyPanel").classList.add("hidden");$
 $("#logoutBtn").onclick=()=>{
   try{localStorage.removeItem("pr_user");}catch(e){} user=null;
   $("#menu").classList.add("hidden");$("#quiz").classList.add("hidden");$("#results").classList.add("hidden");
-  $("#userBox").classList.remove("show");$("#premPill").style.display="";
+  $("#userBox").classList.remove("show");$("#premPill").style.display="";$("#homeNav").style.display="";
   $("#gate").classList.remove("hidden");
   $("#inEmail").value="";$("#inPass").value="";$("#inFirst").value="";$("#inLast").value="";
 };
@@ -921,7 +932,7 @@ $("#logoutBtn").onclick=()=>{
 function enterApp(){
   $("#gate").classList.add("hidden");
   $("#userBox").classList.add("show");
-  $("#premPill").style.display="none";
+  $("#premPill").style.display="none";$("#homeNav").style.display="none";
   $("#uName").textContent="Hi, "+firstName(user.name);
   $("#uAvatar").textContent=initials(user.name);
   renderUserMeta();
