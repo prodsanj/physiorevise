@@ -514,7 +514,7 @@
   <!-- ===== CUSTOM QUIZ (premium) ===== -->
   <section id="custom" class="hidden">
     <div class="panel">
-      <div class="ed-top"><h2 style="margin:0;color:var(--muted)">AI custom quiz</h2><div class="ed-actions"><button class="ghostBtn ed-btn" id="cqDone">Done</button></div></div>
+      <div class="ed-top"><h2 style="margin:0;color:var(--muted)">Custom quiz</h2><div class="ed-actions"><button class="ghostBtn ed-btn" id="cqDone">Done</button></div></div>
       <div class="field" style="margin-top:14px"><label class="lbl">Focus</label>
         <div class="seg small" id="cqMode">
           <button data-mode="weak" class="active">My weak areas</button>
@@ -528,7 +528,7 @@
       <button class="metalBtn" id="cqStart">Generate quiz</button>
       <div class="hint" id="cqHint"></div>
     </div>
-    <p class="disclaimer">“Weak areas” uses your recorded accuracy to surface the questions you find hardest and ones you haven't seen. A live AI generator can create brand-new questions once the model backend is connected.</p>
+    <p class="disclaimer">“Weak areas” uses your recorded accuracy to surface the questions you find hardest and ones you haven't seen. In the live product, brand-new questions can be generated automatically once the backend is connected.</p>
   </section>
 
   <!-- ===== PERFORMANCE DASHBOARD (premium) ===== -->
@@ -1012,7 +1012,7 @@ $("#menuBtn").onclick=()=>{$("#results").classList.add("hidden");$("#menu").clas
 
 /* ===================== PREMIUM FEATURES ===================== */
 function addRationale(card,q){const ex=card.querySelector(".explain");if(!ex)return;const w=document.createElement("div");w.className="tutor";if(isPremium()){w.innerHTML='<button class="tutorBtn">📖 Full rationale &amp; references</button>';w.querySelector("button").onclick=function(){const body=q.r?escapeHtml(q.r).replace(/\n/g,"<br>"):"A fuller rationale — with references where relevant — can be added here by the clinical reviewer. The concise explanation above already covers the key point for this question.";w.innerHTML='<div class="tutor-panel"><div class="who">Full rationale &amp; references</div><div>'+body+'</div></div>';};}else{w.innerHTML='<button class="tutorBtn">📖 Full rationale &amp; references <span class="lockpill">Premium</span></button>';w.querySelector("button").onclick=function(){showUpsell();};}ex.appendChild(w);}
-function addTutor(card,q){const ex=card.querySelector(".explain");if(!ex)return;const tWrap=document.createElement("div");tWrap.className="tutor";if(isPremium()){tWrap.innerHTML='<button class="tutorBtn">💬 Explain in more depth</button>';tWrap.querySelector("button").onclick=function(){tWrap.innerHTML='<div class="tutor-panel"><div class="who">Guided explanation</div><div>'+escapeHtml(q.e)+'</div><div class="tutor-ask"><input type="text" placeholder="Ask a follow-up question…"><button>Ask</button></div><div class="tutor-reply" style="margin-top:8px;color:var(--muted);font-size:12.5px"></div></div>';const inp=tWrap.querySelector("input"),rep=tWrap.querySelector(".tutor-reply");tWrap.querySelector(".tutor-ask button").onclick=function(){if(!inp.value.trim())return;rep.textContent="In the live product, follow-up questions are answered in more depth. Connect the AI model (backend) to enable full responses.";inp.value="";};};}else{tWrap.innerHTML='<button class="tutorBtn">💬 Explain in more depth <span class="lockpill">Premium</span></button>';tWrap.querySelector("button").onclick=function(){showUpsell();};}ex.appendChild(tWrap);}
+function addTutor(card,q){const ex=card.querySelector(".explain");if(!ex)return;const tWrap=document.createElement("div");tWrap.className="tutor";if(isPremium()){tWrap.innerHTML='<button class="tutorBtn">💬 Explain in more depth</button>';tWrap.querySelector("button").onclick=function(){tWrap.innerHTML='<div class="tutor-panel"><div class="who">Guided explanation</div><div>'+escapeHtml(q.e)+'</div><div class="tutor-ask"><input type="text" placeholder="Ask a follow-up question…"><button>Ask</button></div><div class="tutor-reply" style="margin-top:8px;color:var(--muted);font-size:12.5px"></div></div>';const inp=tWrap.querySelector("input"),rep=tWrap.querySelector(".tutor-reply");tWrap.querySelector(".tutor-ask button").onclick=function(){if(!inp.value.trim())return;rep.textContent="In the live product, follow-up questions are answered in more depth once the backend is connected.";inp.value="";};};}else{tWrap.innerHTML='<button class="tutorBtn">💬 Explain in more depth <span class="lockpill">Premium</span></button>';tWrap.querySelector("button").onclick=function(){showUpsell();};}ex.appendChild(tWrap);}
 
 /* ----- custom quiz ----- */
 let cqState={mode:"weak",n:10};
