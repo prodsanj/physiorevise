@@ -321,6 +321,17 @@
   .resumebox{background:rgba(255,255,255,.05);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(143,176,255,.2);border-radius:16px}
   .qstat .bar,.xpbar,.progress{background:rgba(255,255,255,.06);border-color:rgba(143,176,255,.16)}
   .tier-chip,.editlink,.premium-pill{border-radius:999px}
+  .perf .perf-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:6px}
+  .perf-big{font-size:30px;font-weight:800}
+  .perf-sub{font-size:12.5px;color:var(--muted)}
+  .perf-bar{height:12px;border-radius:999px;overflow:hidden;display:flex;border:1px solid rgba(143,176,255,.16);background:rgba(255,255,255,.06)}
+  .perf-bar i{height:100%;display:block;transition:width .5s}
+  .perf-bar .c{background:var(--good)} .perf-bar .w{background:rgba(255,107,107,.75)}
+  .perf-tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+  .perf-tile{background:rgba(255,255,255,.04);border:1px solid rgba(143,176,255,.12);border-radius:12px;padding:12px;text-align:center}
+  .perf-tile .v{font-size:19px;font-weight:800}
+  .perf-tile .k{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
+  .perf .vg{color:var(--good)} .perf .vr{color:var(--bad)}
   .hidden{display:none}
 </style>
 </head>
@@ -452,6 +463,17 @@
 
   <!-- ===== MENU ===== -->
   <section id="menu" class="hidden">
+    <div class="panel perf" id="perfCard" style="display:none">
+      <div class="perf-top">
+        <div class="perf-big" id="perfPct">0%</div>
+        <div class="perf-sub" id="perfSub">0 questions answered</div>
+      </div>
+      <div class="perf-bar"><i class="c" id="perfC"></i><i class="w" id="perfW"></i></div>
+      <div class="perf-tiles">
+        <div class="perf-tile"><div class="v vg" id="perfCorrect">0</div><div class="k">Correct</div></div>
+        <div class="perf-tile"><div class="v vr" id="perfWrong">0</div><div class="k">Incorrect</div></div>
+      </div>
+    </div>
     <div class="resumebox hidden" id="resumeBox">
       <div><div class="rb-t">Resume saved session</div><div class="rb-s" id="resumeInfo"></div></div>
       <div class="rb-btns"><button class="metalBtn" id="resumeBtn" style="width:auto;padding:10px 16px">Resume</button><button class="ghostBtn" id="resumeDiscard" style="width:auto;padding:10px 16px">Discard</button></div>
@@ -855,6 +877,8 @@ function saveStats(){try{localStorage.setItem("prx_stats",JSON.stringify(STATS))
 let STATS=loadStats();
 function recordStat(k,correct){STATS[k]=STATS[k]||{c:0,w:0};if(correct)STATS[k].c++;else STATS[k].w++;saveStats();}
 function qStat(k){const s=STATS[k];if(!s)return null;const t=s.c+s.w;if(!t)return null;const pct=Math.round(s.c/t*100);return {pct:pct,wpct:100-pct,total:t};}
+function overallStats(){var c=0,w=0;for(var k in STATS){if(STATS.hasOwnProperty(k)){c+=STATS[k].c||0;w+=STATS[k].w||0;}}return {c:c,w:w,t:c+w};}
+function renderPerf(){var card=document.getElementById("perfCard");if(!card)return;var s=overallStats();if(s.t===0){card.style.display="none";return;}var pct=Math.round(s.c/s.t*100);card.style.display="";document.getElementById("perfPct").textContent=pct+"%";document.getElementById("perfSub").textContent=s.t+" question"+(s.t===1?"":"s")+" answered";document.getElementById("perfCorrect").textContent=s.c;document.getElementById("perfWrong").textContent=s.w;document.getElementById("perfC").style.width=pct+"%";document.getElementById("perfW").style.width=(100-pct)+"%";}
 /* ----- tier + usage ----- */
 const FREE_LIMIT=25;
 function getTier(){try{return localStorage.getItem("prx_tier")==="premium"?"premium":"free";}catch(e){return "free";}}
@@ -865,7 +889,7 @@ function loadUsage(){try{const u=JSON.parse(localStorage.getItem("prx_usage"));i
 let USAGE=loadUsage();
 function usageToday(){if(USAGE.date!==todayStr())USAGE={date:todayStr(),n:0};return USAGE.n;}
 function bumpUsage(){if(USAGE.date!==todayStr())USAGE={date:todayStr(),n:0};USAGE.n++;try{localStorage.setItem("prx_usage",JSON.stringify(USAGE));}catch(e){}}
-function refreshTierUI(){const prem=isPremium();const chip=$("#tierChip");if(chip){chip.textContent=prem?"Premium ★":"Free";chip.className="tier-chip "+(prem?"prem":"free");}document.querySelectorAll(".lockpill").forEach(function(l){l.style.display=prem?"none":"";});const ub=$("#upBanner");if(ub)ub.style.display=prem?"none":"";const bar=$("#useBar");if(bar)bar.textContent=prem?"Premium · unlimited questions":(Math.max(0,FREE_LIMIT-usageToday())+" of "+FREE_LIMIT+" free questions left today");refreshResumeUI();}
+function refreshTierUI(){const prem=isPremium();const chip=$("#tierChip");if(chip){chip.textContent=prem?"Premium ★":"Free";chip.className="tier-chip "+(prem?"prem":"free");}document.querySelectorAll(".lockpill").forEach(function(l){l.style.display=prem?"none":"";});const ub=$("#upBanner");if(ub)ub.style.display=prem?"none":"";const bar=$("#useBar");if(bar)bar.textContent=prem?"Premium · unlimited questions":(Math.max(0,FREE_LIMIT-usageToday())+" of "+FREE_LIMIT+" free questions left today");refreshResumeUI();renderPerf();}
 function showUpsell(){const m=document.createElement("div");m.className="modal";m.innerHTML='<div class="modal-card"><h3>Unlock Premium</h3><div class="price">Demo upgrade · no payment taken</div><ul class="feat-list"><li>Unlimited questions, all streams</li><li>In-depth explanations &amp; guided reasoning</li><li>Personalised practice on your weak areas</li><li>Performance dashboard &amp; heatmap</li></ul><div class="modal-btns"><button class="ghostBtn" id="upCancel">Not now</button><button class="metalBtn" id="upGo">Upgrade (demo)</button></div></div>';document.body.appendChild(m);m.addEventListener("click",function(e){if(e.target===m)m.remove();});m.querySelector("#upCancel").onclick=function(){m.remove();};m.querySelector("#upGo").onclick=function(){m.remove();setTier("premium");toast("Premium unlocked ✨");};}
 let authMode="signin";
 let sel={stream:"cardio",diff:"all"}, game=null;
